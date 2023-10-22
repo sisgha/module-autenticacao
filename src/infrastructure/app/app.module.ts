@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { ScheduleModule } from '@nestjs/schedule';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { DatabaseModule } from '../database/database.module';
+import { EnvironmentConfigModule } from '../environment-config/environment-config.module';
+import { EventsModule } from '../events/events.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
-import { ThrottlerModule } from '@nestjs/throttler';
-import { ScheduleModule } from '@nestjs/schedule';
-import { EventsModule } from '../events/events.module';
-import { EnvironmentConfigModule } from '../environment-config/environment-config.module';
 
 @Module({
   imports: [
@@ -29,6 +30,8 @@ import { EnvironmentConfigModule } from '../environment-config/environment-confi
     EnvironmentConfigModule,
 
     //
+
+    DatabaseModule,
   ],
 
   controllers: [
