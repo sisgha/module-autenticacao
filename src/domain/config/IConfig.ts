@@ -1,4 +1,5 @@
+import { IConfigRuntime } from './IConfigRuntime';
 import { IConfigTypeORM } from './IConfigTypeORM';
 import { IConfigTypeORMDataSource } from './IConfigTypeORMDataSource';
 
-export interface IConfig extends IConfigTypeORM, IConfigTypeORMDataSource {}
+export interface IConfig extends IConfigRuntime, IConfigTypeORM, IConfigTypeORMDataSource {}

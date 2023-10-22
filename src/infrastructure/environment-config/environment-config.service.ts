@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { IConfig } from '../../domain';
 import { join } from 'path';
 import { DataSourceOptions } from 'typeorm';
+import { IConfig } from '../../domain';
 
 @Injectable()
 export class EnvironmentConfigService implements IConfig {
@@ -10,6 +10,20 @@ export class EnvironmentConfigService implements IConfig {
     // ...
     private configService: ConfigService,
   ) {}
+
+  getRuntimePort(): number {
+    const configPort = this.configService.get<number | string>('PORT') ?? null;
+
+    if (configPort !== null) {
+      const configPortAsNumber = parseInt(String(configPort));
+
+      if (!Number.isNaN(configPortAsNumber)) {
+        return configPortAsNumber;
+      }
+    }
+
+    return 3001;
+  }
 
   getTypeORMBasePath(): string {
     return join(__dirname, '..', '..', 'database');
