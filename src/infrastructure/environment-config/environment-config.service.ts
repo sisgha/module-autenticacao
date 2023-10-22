@@ -25,6 +25,20 @@ export class EnvironmentConfigService implements IConfig {
     return 3001;
   }
 
+  getRuntimeNodeEnv(): string {
+    const runtimeNodeEnv = (this.configService.get<string>('NODE_ENV') ?? 'production').trim().toLocaleLowerCase();
+
+    return runtimeNodeEnv;
+  }
+
+  getRuntimeIsProduction(): boolean {
+    return this.getRuntimeNodeEnv() === 'production';
+  }
+
+  getRuntimeIsDevelopment(): boolean {
+    return !this.getRuntimeIsProduction();
+  }
+
   getTypeORMBasePath(): string {
     return join(__dirname, '..', '..', 'database');
   }
