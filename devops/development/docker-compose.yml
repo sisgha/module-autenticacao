@@ -7,14 +7,14 @@ services:
     working_dir: /code
     depends_on:
       - sisgea-module-autenticacao-db
-    env_file:
-      - .env
-    ports:
-      - 52410:3001
-    volumes:
-      - ../../:/code
     networks:
       - sisgea-net
+    ports:
+      - 127.128.47.10:3001:3001
+    volumes:
+      - ../../:/code
+    env_file:
+      - .env
 
   sisgea-module-autenticacao-db:
     image: bitnami/postgresql:15
@@ -22,12 +22,12 @@ services:
     volumes:
       - 'sisgea-module-autenticacao-db-data:/bitnami/postgresql'
       - './volumes/db/scripts/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d'
-    ports:
-      - 52411:5432
-    env_file:
-      - .db.env
     networks:
       - sisgea-net
+    ports:
+      - 127.128.47.11:5432:5432
+    env_file:
+      - .db.env
 
 networks:
   sisgea-net:

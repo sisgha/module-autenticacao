@@ -9,6 +9,13 @@ git clone https://github.com/sisgha/module-autenticacao.git
 cd module-autenticacao
 ```
 
+### Serviços do [devops/development/docker-compose.yml](./devops/development/docker-compose.yml)
+
+| Host                            | Endereço             | Descrição                               | Plataforma Base                   |
+| ------------------------------- | -------------------- | --------------------------------------- | --------------------------------- |
+| `sisgea-module-autenticacao`    | `127.128.47.10:3001` | Aplicação NodeJS do module-autenticacao | `docker.io/library/node:18`       |
+| `sisgea-module-autenticacao-db` | `127.128.47.11:5432` | Banco de dados postgres                 | `docker.io/bitnami/postgresql:15` |
+
 ### Scripts Make
 
 O projeto conta com um [arquivo make](./Makefile) que comporta scrips destinados ao desenvolvimento da aplicação.
