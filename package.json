@@ -36,6 +36,7 @@
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/schedule": "^3.0.4",
     "@nestjs/throttler": "^5.0.0",
+    "@sisgea/nest-sso": "github:sisgha/sisgea-lib-nest-sso",
     "compression": "^1.7.4",
     "eventemitter2": "^6.4.9",
     "helmet": "^7.0.0",

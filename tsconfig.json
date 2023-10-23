@@ -3,7 +3,7 @@
     "strict": true,
     "module": "node16",
     "lib": ["esnext"],
-    "moduleResolution": "node",
+    "moduleResolution": "Node16",
     "resolveJsonModule": true,
     "declaration": true,
     "removeComments": true,
@@ -15,7 +15,7 @@
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
+    "baseUrl": "./src",
     "incremental": true,
     "skipLibCheck": true
   }
