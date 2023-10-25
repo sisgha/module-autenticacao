@@ -13,7 +13,7 @@ cd module-autenticacao
 
 | Host                            | Endereço             | Descrição                               | Plataforma Base                   |
 | ------------------------------- | -------------------- | --------------------------------------- | --------------------------------- |
-| `sisgea-module-autenticacao`    | `127.128.47.10:3001` | Aplicação NodeJS do module-autenticacao | `docker.io/library/node:18`       |
+| `sisgea-module-autenticacao`    | `127.128.47.10:3471` | Aplicação NodeJS do module-autenticacao | `docker.io/library/node:18`       |
 | `sisgea-module-autenticacao-db` | `127.128.47.11:5432` | Banco de dados postgres                 | `docker.io/bitnami/postgresql:15` |
 
 ### Scripts Make

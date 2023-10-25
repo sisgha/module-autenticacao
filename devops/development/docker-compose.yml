@@ -10,7 +10,8 @@ services:
     networks:
       - sisgea-net
     ports:
-      - 127.128.47.10:3001:3001
+      - 127.128.47.10:3471:3471
+      - 127.128.47.10:9229:9229
     volumes:
       - ../../:/code
     env_file:

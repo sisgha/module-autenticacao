@@ -6,14 +6,14 @@ dev-setup:
 
 dev-up:
 	make dev-setup;
-	sudo docker compose --file devops/development/docker-compose.yml up -d;
+	sudo docker compose --file devops/development/docker-compose.yml -p sisgea-module-autenticacao up -d --remove-orphans;
 
 dev-shell:
 	make dev-up;
-	sudo docker compose --file devops/development/docker-compose.yml exec sisgea-module-autenticacao bash;
+	sudo docker compose --file devops/development/docker-compose.yml -p sisgea-module-autenticacao exec sisgea-module-autenticacao bash;
 
 dev-down:
-	sudo docker compose --file devops/development/docker-compose.yml stop
+	sudo docker compose --file devops/development/docker-compose.yml -p sisgea-module-autenticacao stop
 
 dev-logs:
-	sudo docker compose --file devops/development/docker-compose.yml logs -f
+	sudo docker compose --file devops/development/docker-compose.yml -p sisgea-module-autenticacao logs -f

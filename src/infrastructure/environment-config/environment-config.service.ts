@@ -23,7 +23,7 @@ export class EnvironmentConfigService implements IConfig {
       }
     }
 
-    return 3001;
+    return 3471;
   }
 
   getRuntimeNodeEnv(): string {
@@ -41,7 +41,7 @@ export class EnvironmentConfigService implements IConfig {
   }
 
   getTypeORMBasePath(): string {
-    return join(__dirname, '..', '..', 'database');
+    return join(__dirname, '..', 'database');
   }
 
   getTypeORMPathEntities(): string {
