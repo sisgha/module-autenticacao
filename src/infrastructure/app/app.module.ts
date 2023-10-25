@@ -1,17 +1,21 @@
+import { InMemoryLRUCache } from '@apollo/utils.keyvaluecache';
+import { ApolloFederationDriver, ApolloFederationDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { GraphQLModule } from '@nestjs/graphql';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { AuthenticatedHTTPGuard } from '@sisgea/nest-sso/dist/infrastructure/guards/http';
+import { SISGEANestSSOAuthenticationModule } from '@sisgea/nest-sso';
+import { AuthenticatedGraphQLGuard } from '@sisgea/nest-sso/dist/infrastructure/guards/gql';
 import { DatabaseModule } from '../database/database.module';
 import { EnvironmentConfigModule } from '../environment-config';
 import { EventsModule } from '../events/events.module';
+import { KCClientModule } from '../kc-client/kc-client.module';
+import { SISGEANestSSOContextModule } from '../sisgea-nest-sso-context';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { HttpExceptionFilter } from './filters/HttpExceptionFilter';
-import { SISGEANestSSOContextModule } from './sisgea-nest-sso-context';
-import { SISGEANestSSOAuthenticationModule } from '@sisgea/nest-sso';
+import { GqlExceptionFilter } from './filters/GqlExceptionFilter';
 
 @Module({
   imports: [
@@ -29,10 +33,27 @@ import { SISGEANestSSOAuthenticationModule } from '@sisgea/nest-sso';
     }),
 
     ScheduleModule.forRoot(),
-
     EventsModule.forRoot(),
 
     EnvironmentConfigModule,
+
+    //
+    GraphQLModule.forRoot<ApolloFederationDriverConfig>({
+      driver: ApolloFederationDriver,
+
+      autoSchemaFile: true,
+
+      introspection: true,
+
+      cache: new InMemoryLRUCache({
+        // ~100MiB
+        maxSize: Math.pow(2, 20) * 100,
+        // 5 minutes (in milliseconds)
+        ttl: 5 * 60 * 1000,
+      }),
+    }),
+
+    //
 
     SISGEANestSSOContextModule,
 
@@ -42,6 +63,7 @@ import { SISGEANestSSOAuthenticationModule } from '@sisgea/nest-sso';
 
     //
 
+    KCClientModule,
     DatabaseModule,
 
     //
@@ -55,12 +77,12 @@ import { SISGEANestSSOAuthenticationModule } from '@sisgea/nest-sso';
     //
     {
       provide: APP_GUARD,
-      useClass: AuthenticatedHTTPGuard,
+      useClass: AuthenticatedGraphQLGuard,
     },
 
     {
       provide: APP_FILTER,
-      useClass: HttpExceptionFilter,
+      useClass: GqlExceptionFilter,
     },
 
     AppService,

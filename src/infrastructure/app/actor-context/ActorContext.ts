@@ -66,4 +66,18 @@ export class ActorContext {
       throw error;
     }
   }
+
+  //
+
+  async can() {
+    return true;
+  }
+
+  async readResource(resource: string, data: any) {
+    return data;
+  }
+
+  async ensurePermission(resource: string, action: string, data: any) {
+    return true;
+  }
 }
