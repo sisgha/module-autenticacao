@@ -62,39 +62,39 @@ export class EnvironmentConfigService implements IConfig {
 
   // ...
 
-  getTypeORMDBDatabase(): string | undefined {
+  getDBDatabase(): string | undefined {
     return this.configService.get<string>('DB_DATABASE');
   }
 
-  getTypeORMDBHost(): string | undefined {
+  getDBHost(): string | undefined {
     return this.configService.get<string>('DB_HOST');
   }
 
-  getTypeORMDBPassword(): string | undefined {
+  getDBPassword(): string | undefined {
     return this.configService.get<string>('DB_PASSWORD');
   }
 
-  getTypeORMDBPort(): string | undefined {
+  getDBPort(): string | undefined {
     return this.configService.get<string>('DB_PORT');
   }
 
-  getTypeORMDBSchema(): string | undefined {
+  getDBSchema(): string | undefined {
     return this.configService.get<string>('DB_SCHEMA');
   }
 
-  getTypeORMDBUsername(): string | undefined {
+  getDBUsername(): string | undefined {
     return this.configService.get<string>('DB_USERNAME');
   }
 
-  getTypeORMDBConnection(): string | undefined {
+  getDBConnection(): string | undefined {
     return this.configService.get<string>('DB_CONNECTION');
   }
 
-  getTypeORMDBUrl(): string | undefined {
+  getDBUrl(): string | undefined {
     return this.configService.get<string>('DATABASE_URL');
   }
 
-  getTypeORMDBUseSSL(): string | undefined {
+  getDBUseSSL(): string | undefined {
     return this.configService.get<string>('DATABASE_USE_SSL');
   }
 
@@ -105,20 +105,20 @@ export class EnvironmentConfigService implements IConfig {
   getTypeORMSharedDataSourceOptions(): Partial<DataSourceOptions> {
     const sharedEnvConfig = {};
 
-    const DB_CONNECTION = this.getTypeORMDBConnection();
+    const DB_CONNECTION = this.getDBConnection();
 
     if (DB_CONNECTION !== undefined) {
-      const DB_HOST = this.getTypeORMDBHost();
-      const DB_PORT = this.getTypeORMDBPort();
-      const DB_USERNAME = this.getTypeORMDBUsername();
-      const DB_PASSWORD = this.getTypeORMDBPassword();
-      const DB_DATABASE = this.getTypeORMDBDatabase();
-      const DB_SCHEMA = this.getTypeORMDBSchema();
+      const DB_HOST = this.getDBHost();
+      const DB_PORT = this.getDBPort();
+      const DB_USERNAME = this.getDBUsername();
+      const DB_PASSWORD = this.getDBPassword();
+      const DB_DATABASE = this.getDBDatabase();
+      const DB_SCHEMA = this.getDBSchema();
 
       const TYPEORM_LOGGING = this.getTypeORMLogging();
 
-      const DATABASE_URL = this.getTypeORMDBUrl();
-      const DATABASE_USE_SSL = this.getTypeORMDBUseSSL();
+      const DATABASE_URL = this.getDBUrl();
+      const DATABASE_USE_SSL = this.getDBUseSSL();
 
       Object.assign(sharedEnvConfig, {
         type: DB_CONNECTION,
@@ -270,5 +270,11 @@ export class EnvironmentConfigService implements IConfig {
       clientId,
       clientSecret,
     };
+  }
+
+  //
+
+  getMessageBrokerConnectionURL(): string | undefined {
+    return this.configService.get<string>('MESSAGE_BROKER_CONNECTION_URL');
   }
 }

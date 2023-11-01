@@ -1,6 +1,14 @@
 import { ISISGEANestSSOConfig } from '@sisgea/nest-sso';
+import { IConfigDatabase } from './IConfigDatabase';
+import { IConfigMessageBroker } from './IConfigMessageBroker';
 import { IConfigRuntime } from './IConfigRuntime';
 import { IConfigTypeORM } from './IConfigTypeORM';
-import { IConfigTypeORMDataSource } from './IConfigTypeORMDataSource';
+import { IConfigTypeORMDataSources } from './IConfigTypeORMDataSources';
 
-export interface IConfig extends IConfigRuntime, IConfigTypeORM, IConfigTypeORMDataSource, ISISGEANestSSOConfig {}
+export interface IConfig
+  extends IConfigRuntime,
+    IConfigDatabase,
+    IConfigTypeORM,
+    IConfigTypeORMDataSources,
+    ISISGEANestSSOConfig,
+    IConfigMessageBroker {}

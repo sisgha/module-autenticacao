@@ -1,4 +1,4 @@
-export interface IConfigTypeORM {
+export interface IConfigDatabase {
   getDBConnection(): string | undefined;
   getDBHost(): string | undefined;
   getDBPort(): string | undefined;

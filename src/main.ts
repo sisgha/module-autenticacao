@@ -3,7 +3,7 @@ import compression from 'compression';
 import 'reflect-metadata';
 import { AppModule } from './infrastructure/app/app.module';
 import { EnvironmentConfigService } from './infrastructure/environment-config/environment-config.service';
-import { getModuleHelmet } from './infrastructure/helpers/modules';
+import { getModuleHelmet } from './infrastructure/helpers/modules.helmet';
 
 async function bootstrap() {
   //

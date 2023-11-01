@@ -12,6 +12,7 @@ import { DatabaseModule } from '../database/database.module';
 import { EnvironmentConfigModule } from '../environment-config';
 import { EventsModule } from '../events/events.module';
 import { KCClientModule } from '../kc-client/kc-client.module';
+import { MessageBrokerModule } from '../message-broker/message-broker.module';
 import { SISGEANestSSOContextModule } from '../sisgea-nest-sso-context';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -65,8 +66,9 @@ import { GqlExceptionFilter } from './filters/GqlExceptionFilter';
 
     KCClientModule,
     DatabaseModule,
-
     //
+
+    MessageBrokerModule,
   ],
 
   controllers: [
