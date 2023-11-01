@@ -75,17 +75,17 @@ export class TableDBEvent1698604344961 implements MigrationInterface {
     BEGIN
         IF      NEW.operation = 'INSERT'
         THEN
-            INSERT INTO db_event (log_id, correlation_id, action, tablename, row_id, data, date_event)
+            INSERT INTO db_event (log_id, correlation_id, action, table_name, row_id, data, date_event)
               VALUES (NEW.id, NEW.correlation_id, 'create', NEW.tabname, to_json(NEW.new_val->'id'), NEW.new_val, NEW.tstamp);
             RETURN NEW;
         ELSIF   NEW.operation = 'UPDATE'
         THEN
-            INSERT INTO db_event (log_id, correlation_id, action, tablename, row_id, data, date_event)
+            INSERT INTO db_event (log_id, correlation_id, action, table_name, row_id, data, date_event)
               VALUES (NEW.id, NEW.correlation_id, 'update', NEW.tabname, to_json(NEW.new_val->'id'), NEW.new_val, NEW.tstamp);
             RETURN NEW;
         ELSIF   NEW.operation = 'DELETE'
         THEN
-          INSERT INTO db_event (log_id, correlation_id, action, tablename, row_id, data, date_event)
+          INSERT INTO db_event (log_id, correlation_id, action, table_name, row_id, data, date_event)
             VALUES (NEW.id, NEW.correlation_id, 'delete', NEW.tabname, to_json(NEW.old_val->'id'), null, NEW.tstamp);
           RETURN NEW;
         END IF;
@@ -117,5 +117,7 @@ export class TableDBEvent1698604344961 implements MigrationInterface {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.dropTable('db_event', true);
+    await queryRunner.query('DROP FUNCTION IF EXISTS handle_db_event_insert CASCADE;');
+    await queryRunner.query('DROP FUNCTION IF EXISTS db_event_from_t_history CASCADE;');
   }
 }

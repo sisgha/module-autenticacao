@@ -1,4 +1,5 @@
 export * from './actor';
+export * from './app';
 export * from './authentication';
 export * from './authorization';
 export * from './config';

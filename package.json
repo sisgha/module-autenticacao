@@ -32,6 +32,7 @@
     "@apollo/federation": "^0.38.1",
     "@apollo/server": "^4.9.4",
     "@apollo/subgraph": "2.2.3",
+    "@imqueue/pg-pubsub": "^1.7.0",
     "@nestjs/apollo": "^12.0.9",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.0.0",

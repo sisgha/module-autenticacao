@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DBEvent } from '../../domain';
+import { getAppResourceKeyByTableName } from '../app/modules/app-resources';
 import { MessageBrokerContainerService } from './message-broker-container.service';
 
 @Injectable()
@@ -15,11 +16,11 @@ export class MessageBrokerService {
       const broker = await this.messageBrokerContainerService.getBroker();
 
       const action = dbEvent.action;
-      const tableName = dbEvent.tableName;
+      const resource = getAppResourceKeyByTableName(dbEvent.tableName);
 
       await broker
         .publish('db_event', dbEvent, {
-          routingKey: `${tableName}.${action}`,
+          routingKey: `${resource}.${action}`,
           options: {
             messageId: dbEvent.id,
           },

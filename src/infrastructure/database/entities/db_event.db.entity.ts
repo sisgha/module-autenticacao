@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
 import { DBEvent } from '../../../domain';
+import { getAppResourceTableName } from '../../app/modules/app-resources';
 
 @Entity('db_event')
 export class DBEventDbEntity<D = unknown> implements DBEvent<D> {
@@ -33,4 +34,10 @@ export class DBEventDbEntity<D = unknown> implements DBEvent<D> {
 
   @CreateDateColumn({ name: 'date_created', type: 'timestamptz', nullable: false })
   dateCreated!: Date;
+
+  //
+
+  get resource() {
+    return getAppResourceTableName(this.tableName) ?? this.tableName;
+  }
 }

@@ -15,4 +15,8 @@ export interface DBEvent<D = unknown> {
   // ...
 
   dateCreated: Date;
+
+  //
+
+  resource: string;
 }

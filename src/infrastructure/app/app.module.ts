@@ -9,6 +9,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { SISGEANestSSOAuthenticationModule } from '@sisgea/nest-sso';
 import { AuthenticatedGraphQLGuard } from '@sisgea/nest-sso/dist/infrastructure/guards/gql';
 import { DatabaseModule } from '../database/database.module';
+import { DBEventsModule } from '../db-events/db-events.module';
 import { EnvironmentConfigModule } from '../environment-config';
 import { EventsModule } from '../events/events.module';
 import { KCClientModule } from '../kc-client/kc-client.module';
@@ -69,6 +70,9 @@ import { GqlExceptionFilter } from './filters/GqlExceptionFilter';
     //
 
     MessageBrokerModule,
+    DBEventsModule,
+
+    //
   ],
 
   controllers: [
