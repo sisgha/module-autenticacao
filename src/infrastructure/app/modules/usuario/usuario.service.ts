@@ -1,7 +1,6 @@
 import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { get, has, omit, pick } from 'lodash';
 import { FindOneOptions } from 'typeorm';
-import { v4 as uuidV4 } from 'uuid';
 import {
   AppResourceKey,
   AuthorizationAction,
@@ -339,14 +338,14 @@ export class UsuarioService {
       ...fieldsData,
     };
 
-    usuario.id = uuidV4();
-
     await actorContext.ensurePermission(AppResourceKey.USUARIO, AuthorizationAction.CREATE, usuario);
 
     const dbUsuario = await actorContext.db_run(async ({ usuarioRepository }) => {
-      await usuarioRepository.save(usuario);
+      const kcUsuario = await this.kcClientService.createUser(actorContext, { ...dto });
 
-      await this.kcClientService.createUser(actorContext, { ...dto }, usuario.id);
+      usuario.id = kcUsuario.id;
+
+      await usuarioRepository.save(usuario);
 
       return <UsuarioDbEntity>usuario;
     });
