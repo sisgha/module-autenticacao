@@ -145,7 +145,7 @@ export class KCClientService {
     }
   }
 
-  async createUser(actorContext: ActorContext, dto: IKCClientServiceCreateUserInput, id: string | null = null) {
+  async createUser(actorContext: ActorContext, dto: IKCClientServiceCreateUserInput) {
     const kcAdminClient = await this.getKcAdminClient();
 
     await this.cleanupUsage(actorContext, null, { email: dto.email, username: dto.matriculaSiape });
@@ -155,7 +155,6 @@ export class KCClientService {
       email: dto.email,
       firstName: dto.nome,
       enabled: true,
-      ...(id !== null ? { id } : {}),
     };
 
     const response = await kcAdminClient.users.create(user);

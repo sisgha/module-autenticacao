@@ -4,6 +4,7 @@ import { ISISGEANestSSOConfigKeyCloakCredentials, ISISGEANestSSOConfigOIDCClient
 import { join } from 'path';
 import { DataSourceOptions } from 'typeorm';
 import { IConfig } from '../../domain';
+import { IConfigSeedSuperUsuarioCredentials } from '../../domain/config/IConfigSuperUsuario';
 
 @Injectable()
 export class EnvironmentConfigService implements IConfig {
@@ -276,5 +277,35 @@ export class EnvironmentConfigService implements IConfig {
 
   getMessageBrokerConnectionURL(): string | undefined {
     return this.configService.get<string>('MESSAGE_BROKER_CONNECTION_URL');
+  }
+
+  //
+
+  getSeedSuperUsuarioEmail(): string | undefined {
+    return this.configService.get<string>('SEED_SUPER_USUARIO_EMAIL');
+  }
+
+  getSeedSuperUsuarioMatriculaSiape(): string | undefined {
+    return this.configService.get<string>('SEED_SUPER_USUARIO_MATRICULA_SIAPE');
+  }
+
+  getSeedSuperUsuarioPassword(): string | undefined {
+    return this.configService.get<string>('SEED_SUPER_USUARIO_PASSWORD');
+  }
+
+  getSeedSuperUsuarioCredentials(): IConfigSeedSuperUsuarioCredentials {
+    const email = this.getSeedSuperUsuarioEmail() ?? null;
+    const matriculaSiape = this.getSeedSuperUsuarioMatriculaSiape() ?? null;
+    const password = this.getSeedSuperUsuarioPassword() ?? null;
+
+    if (email !== null && matriculaSiape !== null && password !== null) {
+      return {
+        email,
+        password,
+        matriculaSiape,
+      };
+    }
+
+    throw new TypeError('Please provide seed super usuario credentials (email; matricula siape; password).');
   }
 }

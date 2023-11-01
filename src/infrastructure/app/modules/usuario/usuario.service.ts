@@ -16,6 +16,7 @@ import {
 import { ActorContext } from '../../../actor-context/ActorContext/ActorContext';
 import { ActorUser } from '../../../authentication/ActorUser';
 import { UsuarioDbEntity } from '../../../database/entities/usuario.db.entity';
+import { EnvironmentConfigService } from '../../../environment-config';
 import { KCClientService } from '../../../kc-client/kc-client.service';
 import { ValidationErrorCodes, ValidationFailedException } from '../../exceptions';
 
@@ -24,6 +25,7 @@ export class UsuarioService {
   constructor(
     // ...
     private kcClientService: KCClientService,
+    private environmentConfigService: EnvironmentConfigService,
   ) {}
 
   async usuarioFindById(actorContext: ActorContext, dto: IUsuarioFindByIdInput, options?: FindOneOptions<UsuarioDbEntity>) {
@@ -402,7 +404,7 @@ export class UsuarioService {
 
     await actorContext.ensurePermission(AppResourceKey.USUARIO, AuthorizationAction.UPDATE, updatedUsuario);
 
-    const result = await actorContext.db_run(async ({ usuarioRepository }) => {
+    await actorContext.db_run(async ({ usuarioRepository }) => {
       const result = await usuarioRepository
         .createQueryBuilder('user')
         .update()
@@ -410,14 +412,14 @@ export class UsuarioService {
         .where('id = :id', { id: usuario.id })
         .execute();
 
+      const rowsAffected = result.affected ?? 0;
+
+      if (rowsAffected > 0) {
+        await this.kcClientService.updateUser(actorContext, usuario.id, dto);
+      }
+
       return result;
     });
-
-    const rowsAffected = result.affected ?? 0;
-
-    if (rowsAffected > 0) {
-      await this.kcClientService.updateUser(actorContext, usuario.id, dto);
-    }
 
     return this.usuarioFindByIdStrictSimple(actorContext, usuario.id);
   }
