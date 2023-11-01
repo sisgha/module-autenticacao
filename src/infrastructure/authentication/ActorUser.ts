@@ -1,6 +1,5 @@
 import { IRequestUser } from '@sisgea/nest-sso';
-import { IActorUser } from '../../../domain';
-import { AuthenticatedEntityType, IUserRef } from '../../../domain/authentication';
+import { AuthenticatedEntityType, IActorUser, IUserRef } from '../../domain';
 import { Actor } from './Actor';
 
 export class ActorUser extends Actor implements IActorUser {

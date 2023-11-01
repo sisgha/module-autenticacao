@@ -1,9 +1,9 @@
 import { InternalServerErrorException } from '@nestjs/common';
+import { IRequestUser } from '@sisgea/nest-sso';
 import { DataSource } from 'typeorm';
 import { AuthenticatedEntityType } from '../../../domain/authentication';
-import { Actor } from './Actor';
-import { ActorUser } from './ActorUser';
-import { IActorContextDatabaseRunCallback, IActorContextDatabaseRunContext } from './interfaces';
+import { Actor, ActorUser } from '../../authentication';
+import { DatabaseContext } from '../../database/database-context';
 
 export class ActorContext {
   constructor(
@@ -22,9 +22,14 @@ export class ActorContext {
     return new ActorContext(dataSource, ActorUser.forUser(userId));
   }
 
+  static forRequestUser(dataSource: DataSource, requestUser: IRequestUser | null) {
+    const actor = ActorUser.forRequestUser(requestUser);
+    return new ActorContext(dataSource, actor);
+  }
+
   // ...
 
-  async databaseRun<T>(callback: IActorContextDatabaseRunCallback<T>): Promise<T> {
+  async db_run<T>(callback: (payload: DatabaseContext) => Promise<T>): Promise<T> {
     const { dataSource, actor } = this;
 
     try {
@@ -32,7 +37,7 @@ export class ActorContext {
         const queryRunner = entityManager.queryRunner;
 
         if (!queryRunner) {
-          throw new InternalServerErrorException('Query runner not found.');
+          throw new InternalServerErrorException();
         }
 
         switch (actor.type) {
@@ -56,9 +61,7 @@ export class ActorContext {
           }
         }
 
-        const context: IActorContextDatabaseRunContext = { entityManager, queryRunner };
-
-        return callback(context);
+        return callback(new DatabaseContext(entityManager));
       });
 
       return result;
@@ -70,14 +73,17 @@ export class ActorContext {
   //
 
   async can() {
+    // TODO: module-autorizacao
     return true;
   }
 
   async readResource(resource: string, data: any) {
+    // TODO: module-autorizacao
     return data;
   }
 
   async ensurePermission(resource: string, action: string, data: any) {
+    // TODO: module-autorizacao
     return true;
   }
 }

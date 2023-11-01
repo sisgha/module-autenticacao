@@ -1,5 +1,4 @@
-import { IActor } from '../../../domain';
-import { AuthenticatedEntityType } from '../../../domain/authentication';
+import { AuthenticatedEntityType, IActor } from '../../domain';
 
 export class Actor implements IActor {
   constructor(
