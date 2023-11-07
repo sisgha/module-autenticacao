@@ -18,8 +18,12 @@ export class MessageBrokerService {
       const action = dbEvent.action;
       const resource = getAppResourceKeyByTableName(dbEvent.tableName);
 
+      const dbEventData = {
+        ...dbEvent,
+      };
+
       await broker
-        .publish('db_event', dbEvent, {
+        .publish('db_event', dbEventData, {
           routingKey: `${resource}.${action}`,
           options: {
             messageId: dbEvent.id,

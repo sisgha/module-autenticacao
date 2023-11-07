@@ -37,7 +37,14 @@ export class DBEventDbEntity<D = unknown> implements DBEvent<D> {
 
   //
 
-  get resource() {
-    return getAppResourceTableName(this.tableName) ?? this.tableName;
+  resource!: string;
+
+  constructor() {
+    Object.defineProperty(this, 'resource', {
+      enumerable: true,
+      get: function () {
+        return getAppResourceTableName(this.tableName) ?? this.tableName;
+      },
+    });
   }
 }
