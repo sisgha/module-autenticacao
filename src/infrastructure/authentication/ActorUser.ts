@@ -1,23 +1,23 @@
-import { IRequestUser } from '@sisgea/nest-sso';
-import { AuthenticatedEntityType, IActorUser, IUserRef } from '../../domain';
+import { IRequestUser } from '@sisgea/sso-nest-client';
+import { IAuthenticatedEntityType, IActorUser, IAuthenticatedUserRef } from '../../domain';
 import { Actor } from './Actor';
 
 export class ActorUser extends Actor implements IActorUser {
-  userRef: IUserRef;
+  userRef: IAuthenticatedUserRef;
 
-  readonly type: AuthenticatedEntityType.USER = AuthenticatedEntityType.USER;
+  readonly type: IAuthenticatedEntityType.USUARIO = IAuthenticatedEntityType.USUARIO;
 
-  constructor(userRef: IUserRef) {
+  constructor(userRef: IAuthenticatedUserRef) {
     super();
     this.userRef = userRef;
   }
 
-  static forUserRef(userRef: IUserRef) {
+  static forUserRef(userRef: IAuthenticatedUserRef) {
     return new ActorUser(userRef);
   }
 
   static forUser(userId: string) {
-    const userRef: IUserRef = { id: userId };
+    const userRef: IAuthenticatedUserRef = { id: userId };
     return ActorUser.forUserRef(userRef);
   }
 

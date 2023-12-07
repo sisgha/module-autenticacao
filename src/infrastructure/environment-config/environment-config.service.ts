@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ISISGEANestSSOConfigKeyCloakCredentials, ISISGEANestSSOConfigOIDCClientCredentials } from '@sisgea/nest-sso';
+import { ISISGEANestSSOConfigKeyCloakCredentials, ISISGEANestSSOConfigOIDCClientCredentials } from '@sisgea/sso-nest-client';
 import { join } from 'path';
 import { DataSourceOptions } from 'typeorm';
 import { IConfig } from '../../domain';
@@ -12,6 +12,11 @@ export class EnvironmentConfigService implements IConfig {
     // ...
     private configService: ConfigService,
   ) {}
+
+  getSISGEAAutorizacaoGRPCServer(): string | null {
+    const url = this.configService.get<string | string>('SISGEA_AUTORIZACAO_GRPC_SERVER') ?? null;
+    return url;
+  }
 
   getRuntimePort(): number {
     const configPort = this.configService.get<number | string>('PORT') ?? null;

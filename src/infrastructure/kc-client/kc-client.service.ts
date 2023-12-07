@@ -1,4 +1,5 @@
 import UserRepresentation from '@keycloak/keycloak-admin-client/lib/defs/userRepresentation';
+
 import {
   ForbiddenException,
   Injectable,
@@ -6,10 +7,10 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { SISGEANestSSOKCContainerService, SISGEANestSSOOIDCClientContainerService } from '@sisgea/nest-sso';
+import { SISGEANestSSOKCContainerService, SISGEANestSSOOIDCClientContainerService } from '@sisgea/sso-nest-client';
 import { has } from 'lodash';
 import { IUsuarioCreateInput, IUsuarioUpdateInput, IUsuarioUpdatePasswordInput } from '../../domain';
-import { ActorContext } from '../actor-context/ActorContext/ActorContext';
+import { ActorContext } from '../actor-context';
 
 type IKCClientServiceCreateUserInput = Omit<IUsuarioCreateInput, 'nome'> & Partial<Pick<IUsuarioCreateInput, 'nome'>>;
 
@@ -45,7 +46,7 @@ export class KCClientService {
     }
   }
 
-  async findUserByEmail(actorContext: ActorContext, email: string) {
+  async findUserByEmail(actorContext: ActorContext, email: string): Promise<UserRepresentation | null> {
     const kcAdminClient = await this.getKcAdminClient();
 
     const response = await kcAdminClient.users.find({
@@ -59,10 +60,10 @@ export class KCClientService {
 
     const user = response[0];
 
-    return user;
+    return <UserRepresentation>user;
   }
 
-  async findUserByUsername(actorContext: ActorContext, username: string) {
+  async findUserByUsername(actorContext: ActorContext, username: string): Promise<UserRepresentation | null> {
     const kcAdminClient = await this.getKcAdminClient();
 
     const response = await kcAdminClient.users.find({
@@ -76,13 +77,13 @@ export class KCClientService {
 
     const user = response[0];
 
-    return user;
+    return <UserRepresentation>user;
   }
 
-  async findUserByKeycloakId(actorContext: ActorContext, keycloakId: string) {
+  async findUserByKeycloakId(actorContext: ActorContext, keycloakId: string): Promise<UserRepresentation | null> {
     const kcAdminClient = await this.getKcAdminClient();
     const user = await kcAdminClient.users.findOne({ id: keycloakId });
-    return user;
+    return <UserRepresentation>(user ?? null);
   }
 
   async findUserByKeycloakIdStrict(actorContext: ActorContext, keycloakId: string) {
@@ -157,7 +158,7 @@ export class KCClientService {
       enabled: true,
     };
 
-    const response = await kcAdminClient.users.create(user);
+    const response = await kcAdminClient.users.create({ ...user });
 
     return response;
   }

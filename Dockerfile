@@ -1,6 +1,6 @@
 FROM node:18-alpine as base
 RUN apk update && apk add git
-WORKDIR /app
+WORKDIR /sisgea/env-dev/modules/backend-module-autenticacao
 
 FROM base as prod-deps
 COPY package.json .npmrc package-lock.json ./
@@ -15,6 +15,6 @@ RUN npm run build
 RUN rm -rf node_modules
 
 FROM prod-deps
-COPY --from=assets /app /app
-WORKDIR /app
+COPY --from=assets /sisgea/env-dev/modules/backend-module-autenticacao /sisgea/env-dev/modules/backend-module-autenticacao
+WORKDIR /sisgea/env-dev/modules/backend-module-autenticacao
 CMD npm run db:migrate && npm run seed:run && npm run start:prod

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { getAppResourceKeyByTableName } from '../app-resources/app-resources';
 import { DBEvent } from '../../domain';
-import { getAppResourceKeyByTableName } from '../app/modules/app-resources';
 import { MessageBrokerContainerService } from './message-broker-container.service';
 
 @Injectable()
@@ -16,6 +16,7 @@ export class MessageBrokerService {
       const broker = await this.messageBrokerContainerService.getBroker();
 
       const action = dbEvent.action;
+
       const resource = getAppResourceKeyByTableName(dbEvent.tableName);
 
       const dbEventData = {
@@ -30,15 +31,15 @@ export class MessageBrokerService {
           },
         })
         .then(
-          (ps) =>
+          (publicationSession) =>
             new Promise<void>((resolve, reject) => {
-              ps.on('error', (err, messageId) => {
+              publicationSession.on('error', (err, messageId) => {
                 if (messageId === dbEvent.id) {
                   reject(err);
                 }
               });
 
-              ps.on('success', (messageId) => {
+              publicationSession.on('success', (messageId) => {
                 if (messageId === dbEvent.id) {
                   resolve();
                 }

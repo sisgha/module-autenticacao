@@ -1,6 +1,6 @@
-import { AuthenticatedEntityType, IUserRef } from '../authentication';
+import { IAuthenticatedEntityType, IAuthenticatedUserRef } from '../authentication';
 import { IActor } from './IActor';
 
-export interface IActorUser extends IActor<AuthenticatedEntityType.USER> {
-  userRef: IUserRef;
+export interface IActorUser extends IActor<IAuthenticatedEntityType.USUARIO> {
+  userRef: IAuthenticatedUserRef;
 }

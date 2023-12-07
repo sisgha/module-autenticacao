@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { SISGEANestSSOKcContainerModule, SISGEANestSSOOIDCClientContainerModule } from '@sisgea/nest-sso';
+import { SISGEANestSSOKcContainerModule, SISGEANestSSOOIDCClientContainerModule } from '@sisgea/sso-nest-client';
 import { KCClientService } from './kc-client.service';
 
 @Module({

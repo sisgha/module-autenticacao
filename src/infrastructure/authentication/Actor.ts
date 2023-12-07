@@ -1,16 +1,16 @@
-import { AuthenticatedEntityType, IActor } from '../../domain';
+import { IAuthenticatedEntityType, IActor } from '../../domain';
 
 export class Actor implements IActor {
   constructor(
     // ...
-    readonly type: AuthenticatedEntityType = AuthenticatedEntityType.ANONONYMOUS,
+    readonly type: IAuthenticatedEntityType = IAuthenticatedEntityType.ANONONYMOUS,
   ) {}
 
   static forAnonymous() {
-    return new Actor(AuthenticatedEntityType.ANONONYMOUS);
+    return new Actor(IAuthenticatedEntityType.ANONONYMOUS);
   }
 
   static forInternalSystem() {
-    return new Actor(AuthenticatedEntityType.INTERNAL_SYSTEM);
+    return new Actor(IAuthenticatedEntityType.INTERNAL_SYSTEM);
   }
 }

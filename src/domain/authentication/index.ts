@@ -1,2 +1,2 @@
-export * from './IUserRef';
-export * from './AuthenticatedEntityType';
+export * from './IAuthenticatedUserRef';
+export * from './IAuthenticatedEntityType';

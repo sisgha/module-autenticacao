@@ -1,5 +1,5 @@
-import { AuthenticatedEntityType } from '../authentication';
+import { IAuthenticatedEntityType } from '../authentication';
 
-export interface IActor<T extends AuthenticatedEntityType = AuthenticatedEntityType> {
+export interface IActor<T extends IAuthenticatedEntityType = IAuthenticatedEntityType> {
   readonly type: T;
 }

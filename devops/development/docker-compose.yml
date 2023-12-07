@@ -4,7 +4,7 @@ services:
     user: node
     command: sh -c "tail -f /dev/null"
     container_name: sisgea-module-autenticacao
-    working_dir: /code
+    working_dir: /sisgea/env-dev/modules/back-end/module-autenticacao
     depends_on:
       - sisgea-module-autenticacao-db
     networks:
@@ -13,7 +13,8 @@ services:
       - 127.128.47.10:3471:3471
       - 127.128.47.10:9229:9229
     volumes:
-      - ../../:/code
+      - ../../../../../libs:/sisgea/env-dev/libs
+      - ../../:/sisgea/env-dev/modules/back-end/module-autenticacao
     env_file:
       - .env
 

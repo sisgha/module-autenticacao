@@ -1,5 +1,5 @@
 import { Provider } from '@nestjs/common';
-import { ISISGEANestSSOContext, SISGEA_NEST_SSO_CONTEXT } from '@sisgea/nest-sso';
+import { ISISGEANestSSOContext, SISGEA_NEST_SSO_CONTEXT } from '@sisgea/sso-nest-client';
 import { EnvironmentConfigService } from '../../environment-config';
 
 export const sisgeaNestSSOContextProvider: Provider<ISISGEANestSSOContext> = {
