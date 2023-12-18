@@ -1,2 +1,2 @@
-export * from './db_event.model';
-export * from './usuario.model';
+export * from './autenticacao-db-event.model';
+export * from './autenticacao-usuario.model';

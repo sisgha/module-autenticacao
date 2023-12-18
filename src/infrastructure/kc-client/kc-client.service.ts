@@ -10,7 +10,7 @@ import {
 import { SISGEANestSSOKCContainerService, SISGEANestSSOOIDCClientContainerService } from '@sisgea/sso-nest-client';
 import { has } from 'lodash';
 import { IUsuarioCreateInput, IUsuarioUpdateInput, IUsuarioUpdatePasswordInput } from '../../domain';
-import { ActorContext } from '../actor-context';
+import { ActorContext } from '../iam/actor-context';
 
 type IKCClientServiceCreateUserInput = Omit<IUsuarioCreateInput, 'nome'> & Partial<Pick<IUsuarioCreateInput, 'nome'>>;
 
@@ -24,26 +24,8 @@ export class KCClientService {
     private oidcClientContainerService: SISGEANestSSOOIDCClientContainerService,
   ) {}
 
-  private async getOIDCClient() {
-    try {
-      const oidcClient = await this.oidcClientContainerService.getTrustIssuerClient();
-      return oidcClient;
-    } catch (e) {
-      throw new InternalServerErrorException();
-    }
-  }
-
   static buildUserFullName(user: UserRepresentation) {
     return `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim();
-  }
-
-  private async getKcAdminClient() {
-    try {
-      const kcAdminClient = await this.kcContainerService.getAdminClient();
-      return kcAdminClient;
-    } catch (error) {
-      throw new InternalServerErrorException();
-    }
   }
 
   async findUserByEmail(actorContext: ActorContext, email: string): Promise<UserRepresentation | null> {
@@ -290,6 +272,24 @@ export class KCClientService {
       });
 
       return true;
+    }
+  }
+
+  private async getOIDCClient() {
+    try {
+      const oidcClient = await this.oidcClientContainerService.getTrustIssuerClient();
+      return oidcClient;
+    } catch (e) {
+      throw new InternalServerErrorException();
+    }
+  }
+
+  private async getKcAdminClient() {
+    try {
+      const kcAdminClient = await this.kcContainerService.getAdminClient();
+      return kcAdminClient;
+    } catch (error) {
+      throw new InternalServerErrorException();
     }
   }
 }

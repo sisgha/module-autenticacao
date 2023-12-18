@@ -1,2 +1,2 @@
-export * from './IAppResourceKey';
-export * from './IAppResource';
+export * from './SisgeaResourceKey';
+export * from './IModuleAutenticacaoAppResource';

@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
 import { DBEvent } from '../../../domain';
-import { getAppResourceTableName } from '../../app-resources/app-resources';
+import { getAppResourceTableName } from '../../../application/modules/autenticacao-app-resources';
 
 @Entity('db_event')
 export class DBEventDbEntity<D = unknown> implements DBEvent<D> {

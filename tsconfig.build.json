@@ -1,4 +1,10 @@
 {
   "extends": "./tsconfig.json",
-  "exclude": ["node_modules", "dist", "test", "**/*spec.ts", "sisgea-lib-nest-sso"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "test",
+    "**/*spec.ts",
+    "sisgea-lib-nest-sso"
+  ]
 }

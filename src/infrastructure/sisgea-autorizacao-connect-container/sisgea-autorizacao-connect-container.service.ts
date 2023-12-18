@@ -1,14 +1,14 @@
 import { Injectable, InternalServerErrorException, ServiceUnavailableException } from '@nestjs/common';
-import { UsuarioCanRequest, SISGEAAutorizacaoConnect, GenericCanRequest } from '@sisgea/autorizacao-client';
+import { GenericCanRequest, SISGEAAutorizacaoConnect, UsuarioCanRequest } from '@sisgea/autorizacao-client';
 import { Channel, createChannel, waitForChannelReady } from 'nice-grpc';
 import { EnvironmentConfigService } from '../environment-config';
-import { ActorUser } from '../authentication';
-import { IAuthenticatedEntityType, IActor } from '../../domain';
+import { ActorUser } from '../iam/authentication';
+import { IActor, IAuthenticatedEntityType } from '../../domain';
 
 const onPromiseError = () => Promise.reject(new ServiceUnavailableException());
 
 @Injectable()
-export class SISGEAAutorizacaoConnectContainerService {
+export class SisgeaAutorizacaoConnectContainerService {
   #channel: Channel | null = null;
 
   constructor(private configService: EnvironmentConfigService) {}

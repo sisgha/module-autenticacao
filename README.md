@@ -12,7 +12,7 @@ cd module-autenticacao
 ### Serviços do [devops/development/docker-compose.yml](./devops/development/docker-compose.yml)
 
 | Host                            | Endereço             | Descrição                               | Plataforma Base                   |
-| ------------------------------- | -------------------- | --------------------------------------- | --------------------------------- |
+|---------------------------------|----------------------|-----------------------------------------|-----------------------------------|
 | `sisgea-module-autenticacao`    | `127.128.47.10:3471` | Aplicação NodeJS do module-autenticacao | `docker.io/library/node:18`       |
 | `sisgea-module-autenticacao-db` | `127.128.47.11:5432` | Banco de dados postgres                 | `docker.io/bitnami/postgresql:15` |
 
@@ -67,7 +67,8 @@ $ npm run test:cov
 
 #### Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If
+you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
 #### Stay in touch
 

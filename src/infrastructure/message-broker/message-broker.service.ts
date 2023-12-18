@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { getAppResourceKeyByTableName } from '../app-resources/app-resources';
+import { getAppResourceKeyByTableName } from '../../application/modules/autenticacao-app-resources';
 import { DBEvent } from '../../domain';
 import { MessageBrokerContainerService } from './message-broker-container.service';
 

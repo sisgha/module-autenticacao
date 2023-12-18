@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { ACTOR_CONTEXT_SYSTEM } from '../../actor-context/providers/actor-context-system.provider';
+import { ACTOR_CONTEXT_SYSTEM } from '../../iam/actor-context/providers/actor-context-system.provider';
 import { AppModule } from '../../../application/app.module';
 import { EnvironmentConfigService } from '../../environment-config';
 import { KCClientService } from '../../kc-client';

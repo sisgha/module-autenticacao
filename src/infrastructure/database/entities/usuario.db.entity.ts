@@ -1,8 +1,8 @@
 import { Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from 'typeorm';
-import { UsuarioModel } from '../../../domain';
+import { AutenticacaoUsuarioModel } from '../../../domain';
 
 @Entity('usuario')
-export class UsuarioDbEntity implements UsuarioModel {
+export class UsuarioDbEntity implements AutenticacaoUsuarioModel {
   @PrimaryColumn({ name: 'id' })
   id!: string;
 

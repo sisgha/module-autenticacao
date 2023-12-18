@@ -8,19 +8,18 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { SISGEANestSSOAuthenticationModule } from '@sisgea/sso-nest-client';
 import { AuthenticatedGraphQLGuard } from '@sisgea/sso-nest-client/dist/application/gql';
-import { ActorContextModule } from '../infrastructure/actor-context';
+import { ActorContextModule } from '../infrastructure/iam/actor-context';
 import { DatabaseModule } from '../infrastructure/database/database.module';
 import { DBEventsModule } from '../infrastructure/db-events/db-events.module';
 import { EnvironmentConfigModule } from '../infrastructure/environment-config';
-import { EventsModule } from '../infrastructure/events/events.module';
-import { GqlExceptionFilter } from '../infrastructure/filters/GqlExceptionFilter';
+import { GqlExceptionFilter } from './filters/GqlExceptionFilter';
 import { KCClientModule } from '../infrastructure/kc-client';
 import { MessageBrokerModule } from '../infrastructure/message-broker/message-broker.module';
-import { SISGEAAutorizacaoConnectContainerModule } from '../infrastructure/sisgea-autorizacao-connect-container/sisgea-autorizacao-connect-container.module';
-import { SISGEANestSSOContextModule } from '../infrastructure/sisgea-nest-sso-context';
+import { SisgeaAutorizacaoConnectContainerModule } from '../infrastructure/sisgea-autorizacao-connect-container/sisgea-autorizacao-connect-container.module';
+import { SisgeaNestSsoContextModule } from '../infrastructure/sisgea-nest-sso-context';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsuarioModule } from './modules/usuario/usuario.module';
+import { AutenticacaoUsuarioModule } from './modules/autenticacao-usuario/autenticacao-usuario.module';
 
 @Module({
   imports: [
@@ -38,7 +37,6 @@ import { UsuarioModule } from './modules/usuario/usuario.module';
     }),
 
     ScheduleModule.forRoot(),
-    EventsModule.forRoot(),
 
     EnvironmentConfigModule,
 
@@ -60,7 +58,7 @@ import { UsuarioModule } from './modules/usuario/usuario.module';
 
     //
 
-    SISGEANestSSOContextModule,
+    SisgeaNestSsoContextModule,
 
     //
 
@@ -68,7 +66,7 @@ import { UsuarioModule } from './modules/usuario/usuario.module';
 
     //
 
-    SISGEAAutorizacaoConnectContainerModule,
+    SisgeaAutorizacaoConnectContainerModule,
 
     //
 
@@ -85,7 +83,7 @@ import { UsuarioModule } from './modules/usuario/usuario.module';
 
     //
 
-    UsuarioModule,
+    AutenticacaoUsuarioModule,
   ],
 
   controllers: [

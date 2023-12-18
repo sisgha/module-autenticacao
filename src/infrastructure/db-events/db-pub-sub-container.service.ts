@@ -9,10 +9,6 @@ export class DBPubSubContainerService {
     private environmentConfigService: EnvironmentConfigService,
   ) {}
 
-  async createPubSubInstance() {
-    return DBPubSubContainerService.createPubSubInstance(this.environmentConfigService);
-  }
-
   static async createPubSubInstance(environmentConfigService: EnvironmentConfigService) {
     const url = environmentConfigService.getDBUrl() ?? null;
 
@@ -31,5 +27,9 @@ export class DBPubSubContainerService {
     } else {
       throw new TypeError('Please provide database connection URL.');
     }
+  }
+
+  async createPubSubInstance() {
+    return DBPubSubContainerService.createPubSubInstance(this.environmentConfigService);
   }
 }

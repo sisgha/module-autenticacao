@@ -17,4 +17,4 @@ import { sisgeaNestSSOContextProvider } from './providers/sisgea-nest-sso-contex
     sisgeaNestSSOContextProvider,
   ],
 })
-export class SISGEANestSSOContextModule {}
+export class SisgeaNestSsoContextModule {}
