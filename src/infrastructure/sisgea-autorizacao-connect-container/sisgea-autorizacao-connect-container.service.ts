@@ -1,9 +1,9 @@
-import {Injectable, InternalServerErrorException, ServiceUnavailableException} from '@nestjs/common';
-import {GenericCanRequest, SISGEAAutorizacaoConnect, UsuarioCanRequest} from '@sisgea/autorizacao-client';
-import {Channel, createChannel, waitForChannelReady} from 'nice-grpc';
-import {EnvironmentConfigService} from '../environment-config';
-import {ActorUser} from '../iam/authentication';
-import {IActor, IAuthenticatedEntityType} from '../../domain';
+import { Injectable, InternalServerErrorException, ServiceUnavailableException } from '@nestjs/common';
+import { GenericCanRequest, SISGEAAutorizacaoConnect, UsuarioCanRequest } from '@sisgea/autorizacao-client';
+import { Channel, createChannel, waitForChannelReady } from 'nice-grpc';
+import { EnvironmentConfigService } from '../environment-config';
+import { ActorUser } from '../iam/authentication';
+import { IActor, IAuthenticatedEntityType } from '../../domain';
 
 const onPromiseError = () => Promise.reject(new ServiceUnavailableException());
 
@@ -11,8 +11,7 @@ const onPromiseError = () => Promise.reject(new ServiceUnavailableException());
 export class SisgeaAutorizacaoConnectContainerService {
   #channel: Channel | null = null;
 
-  constructor(private configService: EnvironmentConfigService) {
-  }
+  constructor(private configService: EnvironmentConfigService) {}
 
   async setupChannel() {
     if (this.#channel === null) {
@@ -46,19 +45,19 @@ export class SisgeaAutorizacaoConnectContainerService {
 
   async checkInternalSystemCan(canRequest: GenericCanRequest) {
     const checkServiceClient = await this.getCheckServiceClient();
-    const {can} = await checkServiceClient.internalSystemCan(canRequest).catch(onPromiseError);
+    const { can } = await checkServiceClient.internalSystemCan(canRequest).catch(onPromiseError);
     return can;
   }
 
   async checkAnonymousCan(canRequest: GenericCanRequest) {
     const checkServiceClient = await this.getCheckServiceClient();
-    const {can} = await checkServiceClient.anonymousCan(canRequest).catch(onPromiseError);
+    const { can } = await checkServiceClient.anonymousCan(canRequest).catch(onPromiseError);
     return can;
   }
 
   async checkUsuarioCan(canRequest: UsuarioCanRequest) {
     const checkServiceClient = await this.getCheckServiceClient();
-    const {can} = await checkServiceClient.usuarioCan(canRequest).catch(onPromiseError);
+    const { can } = await checkServiceClient.usuarioCan(canRequest).catch(onPromiseError);
     return can;
   }
 

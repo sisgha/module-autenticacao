@@ -1,4 +1,4 @@
-import {UsuarioFindByIdInputZod} from './UsuarioFindByIdInputZod';
+import { UsuarioFindByIdInputZod } from './UsuarioFindByIdInputZod';
 
 export const UsuarioDeleteInputZod = UsuarioFindByIdInputZod.pick({
   id: true,

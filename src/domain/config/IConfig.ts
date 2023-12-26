@@ -1,11 +1,11 @@
-import {ISisgeaNestAuthConnectConfig} from '@sisgea/nest-auth-connect';
-import {IConfigDatabase} from './IConfigDatabase';
-import {IConfigMessageBroker} from './IConfigMessageBroker';
-import {IConfigRuntime} from './IConfigRuntime';
-import {IConfigSISGEAAutorizacao} from './IConfigSISGEAAutorizacao';
-import {IConfigSeedSuperUsuario} from './IConfigSuperUsuario';
-import {IConfigTypeORM} from './IConfigTypeORM';
-import {IConfigTypeORMDataSources} from './IConfigTypeORMDataSources';
+import { ISisgeaNestAuthConnectConfig } from '@sisgea/nest-auth-connect';
+import { IConfigDatabase } from './IConfigDatabase';
+import { IConfigMessageBroker } from './IConfigMessageBroker';
+import { IConfigRuntime } from './IConfigRuntime';
+import { IConfigSISGEAAutorizacao } from './IConfigSISGEAAutorizacao';
+import { IConfigSeedSuperUsuario } from './IConfigSuperUsuario';
+import { IConfigTypeORM } from './IConfigTypeORM';
+import { IConfigTypeORMDataSources } from './IConfigTypeORMDataSources';
 
 export interface IConfig
   extends IConfigRuntime,
@@ -15,5 +15,4 @@ export interface IConfig
     ISisgeaNestAuthConnectConfig,
     IConfigMessageBroker,
     IConfigSISGEAAutorizacao,
-    IConfigSeedSuperUsuario {
-}
+    IConfigSeedSuperUsuario {}

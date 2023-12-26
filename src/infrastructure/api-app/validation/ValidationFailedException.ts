@@ -1,4 +1,4 @@
-import {UnprocessableEntityException} from '@nestjs/common';
+import { UnprocessableEntityException } from '@nestjs/common';
 
 export type IValidationFailedExceptionResponse = {
   statusCode: number;

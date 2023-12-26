@@ -1,5 +1,5 @@
-import {Directive, Field, ID, ObjectType} from '@nestjs/graphql';
-import {SisgeaAutenticacaoUsuarioModel} from '@sisgea/spec';
+import { Directive, Field, ID, ObjectType } from '@nestjs/graphql';
+import { SisgeaAutenticacaoUsuarioModel } from '@sisgea/spec';
 
 @ObjectType('Usuario')
 @Directive('@key(fields: "id")')
@@ -9,13 +9,13 @@ export class AutenticacaoUsuarioType implements SisgeaAutenticacaoUsuarioModel {
 
   // ...
 
-  @Field(() => String, {nullable: true})
+  @Field(() => String, { nullable: true })
   nome!: string | null;
 
-  @Field(() => String, {nullable: true})
+  @Field(() => String, { nullable: true })
   email!: string | null;
 
-  @Field(() => String, {nullable: true})
+  @Field(() => String, { nullable: true })
   matriculaSiape!: string | null;
 
   // ...
@@ -26,6 +26,6 @@ export class AutenticacaoUsuarioType implements SisgeaAutenticacaoUsuarioModel {
   @Field(() => Date)
   dateUpdated!: Date;
 
-  @Field(() => Date, {nullable: true})
+  @Field(() => Date, { nullable: true })
   dateDeleted!: Date | null;
 }

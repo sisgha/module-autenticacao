@@ -1,4 +1,4 @@
-import {z} from 'zod';
+import { z } from 'zod';
 
 export const UsuarioCreateInputZod = z.object({
   nome: z.string().trim().min(1),

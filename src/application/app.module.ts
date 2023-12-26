@@ -1,27 +1,25 @@
-import {InMemoryLRUCache} from '@apollo/utils.keyvaluecache';
-import {ApolloFederationDriver, ApolloFederationDriverConfig} from '@nestjs/apollo';
-import {Module} from '@nestjs/common';
-import {ConfigModule} from '@nestjs/config';
-import {APP_FILTER, APP_GUARD} from '@nestjs/core';
-import {GraphQLModule} from '@nestjs/graphql';
-import {ScheduleModule} from '@nestjs/schedule';
-import {ThrottlerModule} from '@nestjs/throttler';
-import {SisgeaNestAuthConnectModule} from '@sisgea/nest-auth-connect';
-import {AuthenticatedGqlGuard} from '@sisgea/nest-auth-connect/dist/modules/sisgea-nest-auth-protect/gql';
-import {GqlExceptionFilter} from '../infrastructure/api-app/filters/GqlExceptionFilter';
-import {DatabaseModule} from '../infrastructure/database/database.module';
-import {DBEventsModule} from '../infrastructure/db-events/db-events.module';
-import {EnvironmentConfigModule} from '../infrastructure/environment-config';
-import {ActorContextModule} from '../infrastructure/iam/actor-context';
-import {KeycloakClientModule} from '../infrastructure/keycloak-client';
-import {MessageBrokerModule} from '../infrastructure/message-broker/message-broker.module';
-import {
-  SisgeaAutorizacaoConnectContainerModule
-} from '../infrastructure/sisgea-autorizacao-connect-container/sisgea-autorizacao-connect-container.module';
-import {SisgeaNestAuthConnectConfigModule} from '../infrastructure/sisgea-nest-auth-connect-config';
-import {AppController} from './app.controller';
-import {AppService} from './app.service';
-import {AutenticacaoUsuarioModule} from './modules/autenticacao-usuario/autenticacao-usuario.module';
+import { InMemoryLRUCache } from '@apollo/utils.keyvaluecache';
+import { ApolloFederationDriver, ApolloFederationDriverConfig } from '@nestjs/apollo';
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ScheduleModule } from '@nestjs/schedule';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { SisgeaNestAuthConnectModule } from '@sisgea/nest-auth-connect';
+import { AuthenticatedGqlGuard } from '@sisgea/nest-auth-connect/dist/modules/sisgea-nest-auth-protect/gql';
+import { GqlExceptionFilter } from '../infrastructure/api-app/filters/GqlExceptionFilter';
+import { DatabaseModule } from '../infrastructure/database/database.module';
+import { DBEventsModule } from '../infrastructure/db-events/db-events.module';
+import { EnvironmentConfigModule } from '../infrastructure/environment-config';
+import { ActorContextModule } from '../infrastructure/iam/actor-context';
+import { KeycloakClientModule } from '../infrastructure/keycloak-client';
+import { MessageBrokerModule } from '../infrastructure/message-broker/message-broker.module';
+import { SisgeaAutorizacaoConnectContainerModule } from '../infrastructure/sisgea-autorizacao-connect-container/sisgea-autorizacao-connect-container.module';
+import { SisgeaNestAuthConnectConfigModule } from '../infrastructure/sisgea-nest-auth-connect-config';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { AutenticacaoUsuarioModule } from './modules/autenticacao-usuario/autenticacao-usuario.module';
 
 @Module({
   imports: [
@@ -104,5 +102,4 @@ import {AutenticacaoUsuarioModule} from './modules/autenticacao-usuario/autentic
     AppService,
   ],
 })
-export class AppModule {
-}
+export class AppModule {}

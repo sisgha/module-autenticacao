@@ -1,7 +1,7 @@
-import {Injectable} from '@nestjs/common';
-import {SisgeaDbEventModel} from '@sisgea/spec';
-import {getAppResourceKeyByTableName} from '../../application/modules/autenticacao-app-resources';
-import {MessageBrokerContainerService} from './message-broker-container.service';
+import { Injectable } from '@nestjs/common';
+import { SisgeaDbEventModel } from '@sisgea/spec';
+import { getAppResourceKeyByTableName } from '../../application/modules/autenticacao-app-resources';
+import { MessageBrokerContainerService } from './message-broker-container.service';
 
 @Injectable()
 export class MessageBrokerService {
@@ -9,8 +9,7 @@ export class MessageBrokerService {
     //
 
     private messageBrokerContainerService: MessageBrokerContainerService,
-  ) {
-  }
+  ) {}
 
   async publishDbEvent(dbEvent: SisgeaDbEventModel) {
     try {

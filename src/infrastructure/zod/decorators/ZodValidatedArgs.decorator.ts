@@ -1,8 +1,8 @@
-import {Args} from '@nestjs/graphql';
-import {ArgsOptions} from '@nestjs/graphql/dist/decorators/args.decorator';
-import {ZodType} from 'zod';
-import {ZodValidationPipe} from '../ZodValidationPipe';
+import { Args } from '@nestjs/graphql';
+import { ArgsOptions } from '@nestjs/graphql/dist/decorators/args.decorator';
+import { ZodType } from 'zod';
+import { ZodValidationPipe } from '../ZodValidationPipe';
 
 export const ValidatedArgs = (property: string, zodType: ZodType, options?: ArgsOptions) => {
-  return Args(property, {...options}, new ZodValidationPipe(zodType));
+  return Args(property, { ...options }, new ZodValidationPipe(zodType));
 };

@@ -1,5 +1,5 @@
-import {Field, InputType} from '@nestjs/graphql';
-import {IUsuarioCreateInput} from '@sisgea/spec';
+import { Field, InputType } from '@nestjs/graphql';
+import { IUsuarioCreateInput } from '@sisgea/spec';
 
 @InputType('UsuarioCreateInput')
 export class UsuarioCreateInputType implements IUsuarioCreateInput {
@@ -9,6 +9,6 @@ export class UsuarioCreateInputType implements IUsuarioCreateInput {
   @Field()
   email!: string;
 
-  @Field({nullable: true})
+  @Field({ nullable: true })
   matriculaSiape!: string;
 }

@@ -1,6 +1,6 @@
-import {z} from 'zod';
-import {UsuarioFindByIdInputZod} from './UsuarioFindByIdInputZod';
-import {UsuarioCreateInputZod} from './UsuarioCreateInputZod';
+import { z } from 'zod';
+import { UsuarioFindByIdInputZod } from './UsuarioFindByIdInputZod';
+import { UsuarioCreateInputZod } from './UsuarioCreateInputZod';
 
 export const UpdateUsuarioInputZod = z
   .object({})

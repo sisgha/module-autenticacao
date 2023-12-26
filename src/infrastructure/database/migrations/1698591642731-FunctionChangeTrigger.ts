@@ -1,4 +1,4 @@
-import {MigrationInterface, QueryRunner} from 'typeorm';
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 /**
  * Special thanks for <https://www.cybertec-postgresql.com/en/tracking-changes-in-postgresql/>

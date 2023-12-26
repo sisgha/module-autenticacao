@@ -1,5 +1,5 @@
-import {z} from 'zod';
-import {UsuarioFindByIdInputZod} from './UsuarioFindByIdInputZod';
+import { z } from 'zod';
+import { UsuarioFindByIdInputZod } from './UsuarioFindByIdInputZod';
 
 export const UsuarioUpdatePasswordInputZod = z
   .object({})

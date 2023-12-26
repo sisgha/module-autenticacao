@@ -1,11 +1,10 @@
-import {Injectable, PipeTransform} from '@nestjs/common';
-import {ZodType} from 'zod';
-import {ValidationFailedException} from '../api-app/validation';
+import { Injectable, PipeTransform } from '@nestjs/common';
+import { ZodType } from 'zod';
+import { ValidationFailedException } from '../api-app/validation';
 
 @Injectable()
 export class ZodValidationPipe implements PipeTransform {
-  constructor(private zodType: ZodType) {
-  }
+  constructor(private zodType: ZodType) {}
 
   transform(value: any /*, metadata: ArgumentMetadata */): any {
     const result = this.zodType.safeParse(value);

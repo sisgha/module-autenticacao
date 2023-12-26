@@ -1,9 +1,7 @@
-import {Provider} from '@nestjs/common';
-import {DatabaseService} from '../../../database/database.service';
-import {
-  SisgeaAutorizacaoConnectContainerService
-} from '../../../sisgea-autorizacao-connect-container/sisgea-autorizacao-connect-container.service';
-import {ActorContext} from '../actor-context';
+import { Provider } from '@nestjs/common';
+import { DatabaseService } from '../../../database/database.service';
+import { SisgeaAutorizacaoConnectContainerService } from '../../../sisgea-autorizacao-connect-container/sisgea-autorizacao-connect-container.service';
+import { ActorContext } from '../actor-context';
 
 export const ACTOR_CONTEXT_SYSTEM = Symbol();
 

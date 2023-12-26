@@ -1,7 +1,7 @@
-import {Module} from '@nestjs/common';
-import {AutenticacaoUsuarioResolver} from './adapters/graphql/autenticacao-usuario.resolver';
-import {AutenticacaoUsuarioService} from './autenticacao-usuario.service';
-import {KeycloakClientModule} from '../../../infrastructure/keycloak-client';
+import { Module } from '@nestjs/common';
+import { AutenticacaoUsuarioResolver } from './adapters/graphql/autenticacao-usuario.resolver';
+import { AutenticacaoUsuarioService } from './autenticacao-usuario.service';
+import { KeycloakClientModule } from '../../../infrastructure/keycloak-client';
 
 @Module({
   imports: [
@@ -18,5 +18,4 @@ import {KeycloakClientModule} from '../../../infrastructure/keycloak-client';
     AutenticacaoUsuarioResolver,
   ],
 })
-export class AutenticacaoUsuarioModule {
-}
+export class AutenticacaoUsuarioModule {}

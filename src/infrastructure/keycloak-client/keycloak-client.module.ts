@@ -1,6 +1,6 @@
-import {Module} from '@nestjs/common';
-import {KeycloakAdminClientContainerModule, OidcClientContainerModule} from '@sisgea/nest-auth-connect';
-import {KeycloakClientService} from './keycloak-client.service';
+import { Module } from '@nestjs/common';
+import { KeycloakAdminClientContainerModule, OidcClientContainerModule } from '@sisgea/nest-auth-connect';
+import { KeycloakClientService } from './keycloak-client.service';
 
 @Module({
   imports: [
@@ -17,5 +17,4 @@ import {KeycloakClientService} from './keycloak-client.service';
     KeycloakClientService,
   ],
 })
-export class KeycloakClientModule {
-}
+export class KeycloakClientModule {}

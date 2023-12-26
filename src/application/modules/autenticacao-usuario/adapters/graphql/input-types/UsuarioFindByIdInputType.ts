@@ -1,5 +1,5 @@
-import {Field, ID, InputType} from '@nestjs/graphql';
-import {IUsuarioFindByIdInput} from '@sisgea/spec';
+import { Field, ID, InputType } from '@nestjs/graphql';
+import { IUsuarioFindByIdInput } from '@sisgea/spec';
 
 @InputType('UsuarioFindByIdInput')
 export class UsuarioFindByIdInputType implements IUsuarioFindByIdInput {

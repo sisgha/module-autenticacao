@@ -1,4 +1,4 @@
-import {IModuleAutenticacaoAppResource, SisgeaResourceKey} from '../../domain';
+import { IModuleAutenticacaoAppResource, SisgeaResourceKey } from '../../domain';
 
 export const AutenticacaoAppResourceUsuario: IModuleAutenticacaoAppResource = {
   key: SisgeaResourceKey.USUARIO,

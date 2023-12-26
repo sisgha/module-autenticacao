@@ -1,21 +1,20 @@
-import {Injectable} from '@nestjs/common';
-import {ConfigService} from '@nestjs/config';
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import {
   ISisgeaNestAuthConnectConfigKeycloakCredentials,
   ISisgeaNestAuthConnectConfigOidcClientCredentials,
 } from '@sisgea/nest-auth-connect';
-import {join} from 'path';
-import {DataSourceOptions} from 'typeorm';
-import {IConfig} from '../../domain';
-import {IConfigSeedSuperUsuarioCredentials} from '../../domain/config/IConfigSuperUsuario';
+import { join } from 'path';
+import { DataSourceOptions } from 'typeorm';
+import { IConfig } from '../../domain';
+import { IConfigSeedSuperUsuarioCredentials } from '../../domain/config/IConfigSuperUsuario';
 
 @Injectable()
 export class EnvironmentConfigService implements IConfig {
   constructor(
     // ...
     private nestConfigService: ConfigService,
-  ) {
-  }
+  ) {}
 
   getSISGEAAutorizacaoGRPCServer(): string | null {
     const url = this.nestConfigService.get<string | string>('SISGEA_AUTORIZACAO_GRPC_SERVER') ?? null;

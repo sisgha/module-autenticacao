@@ -7,10 +7,10 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import {KeycloakAdminClientContainer, OidcClientContainer} from '@sisgea/nest-auth-connect';
-import {IUsuarioCreateInput, IUsuarioUpdateInput, IUsuarioUpdatePasswordInput} from '@sisgea/spec';
-import {has} from 'lodash';
-import {ActorContext} from '../iam/actor-context';
+import { KeycloakAdminClientContainer, OidcClientContainer } from '@sisgea/nest-auth-connect';
+import { IUsuarioCreateInput, IUsuarioUpdateInput, IUsuarioUpdatePasswordInput } from '@sisgea/spec';
+import { has } from 'lodash';
+import { ActorContext } from '../iam/actor-context';
 
 type IKCClientServiceCreateUserInput = Omit<IUsuarioCreateInput, 'nome'> & Partial<Pick<IUsuarioCreateInput, 'nome'>>;
 
@@ -22,8 +22,7 @@ export class KeycloakClientService {
     // ...
     private keycloakAdminClientContainer: KeycloakAdminClientContainer,
     private oidcClientContainer: OidcClientContainer,
-  ) {
-  }
+  ) {}
 
   static buildUserFullName(user: UserRepresentation) {
     return `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim();
@@ -65,7 +64,7 @@ export class KeycloakClientService {
 
   async findUserByKeycloakId(actorContext: ActorContext, keycloakId: string): Promise<UserRepresentation | null> {
     const kcAdminClient = await this.getKcAdminClient();
-    const user = await kcAdminClient.users.findOne({id: keycloakId});
+    const user = await kcAdminClient.users.findOne({ id: keycloakId });
     return <UserRepresentation>(user ?? null);
   }
 
@@ -82,13 +81,13 @@ export class KeycloakClientService {
   async cleanupEmailUsage(actorContext: ActorContext, keycloakId: string | null, email: string) {
     const kcAdminClient = await this.getKcAdminClient();
 
-    const users = await kcAdminClient.users.find({email}, {catchNotFound: false});
+    const users = await kcAdminClient.users.find({ email }, { catchNotFound: false });
 
     for (const user of users) {
       const id = user.id;
 
       if (id && id !== keycloakId) {
-        await kcAdminClient.users.update({id}, {email: ''});
+        await kcAdminClient.users.update({ id }, { email: '' });
       }
     }
   }
@@ -96,7 +95,7 @@ export class KeycloakClientService {
   async cleanupUsernameUsage(actorContext: ActorContext, keycloakId: string | null = null, username: string) {
     const kcAdminClient = await this.getKcAdminClient();
 
-    const users = await kcAdminClient.users.find({username}, {catchNotFound: false});
+    const users = await kcAdminClient.users.find({ username }, { catchNotFound: false });
 
     if (users.length > 0) {
       throw new Error('Username already taken');
@@ -132,7 +131,7 @@ export class KeycloakClientService {
   async createUser(actorContext: ActorContext, dto: IKCClientServiceCreateUserInput) {
     const kcAdminClient = await this.getKcAdminClient();
 
-    await this.cleanupUsage(actorContext, null, {email: dto.email, username: dto.matriculaSiape});
+    await this.cleanupUsage(actorContext, null, { email: dto.email, username: dto.matriculaSiape });
 
     const user: UserRepresentation = {
       username: dto.matriculaSiape,
@@ -141,34 +140,34 @@ export class KeycloakClientService {
       enabled: true,
     };
 
-    const response = await kcAdminClient.users.create({...user});
+    const response = await kcAdminClient.users.create({ ...user });
 
     return response;
   }
 
   async updateUser(actorContext: ActorContext, keycloakId: string, dto: IUsuarioUpdateInput) {
-    await this.cleanupUsage(actorContext, keycloakId, {email: dto.email, username: dto.matriculaSiape});
+    await this.cleanupUsage(actorContext, keycloakId, { email: dto.email, username: dto.matriculaSiape });
 
     const kcAdminClient = await this.getKcAdminClient();
 
     const user: UserRepresentation = {
       ...(has(dto, 'nome')
         ? {
-          firstName: dto.nome,
-          lastName: '',
-        }
+            firstName: dto.nome,
+            lastName: '',
+          }
         : {}),
 
       ...(has(dto, 'email')
         ? {
-          email: dto.email,
-        }
+            email: dto.email,
+          }
         : {}),
 
       ...(has(dto, 'matriculaSiape')
         ? {
-          username: dto.matriculaSiape,
-        }
+            username: dto.matriculaSiape,
+          }
         : {}),
     };
 
@@ -188,7 +187,7 @@ export class KeycloakClientService {
     const user = await this.findUserByKeycloakId(actorContext, keycloakId);
 
     if (user) {
-      await kcAdminClient.users.del({id: keycloakId});
+      await kcAdminClient.users.del({ id: keycloakId });
     }
   }
 
@@ -234,8 +233,7 @@ export class KeycloakClientService {
         if (tokenset) {
           return true;
         }
-      } catch (error) {
-      }
+      } catch (error) {}
 
       return false;
     }

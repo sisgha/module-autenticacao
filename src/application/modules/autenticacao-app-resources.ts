@@ -1,5 +1,5 @@
-import {IModuleAutenticacaoAppResource} from '../../domain';
-import {AutenticacaoAppResourceUsuario} from './autenticacao-app-resource-usuario';
+import { IModuleAutenticacaoAppResource } from '../../domain';
+import { AutenticacaoAppResourceUsuario } from './autenticacao-app-resource-usuario';
 
 export const AutenticacaoAppResources: IModuleAutenticacaoAppResource[] = [
   //

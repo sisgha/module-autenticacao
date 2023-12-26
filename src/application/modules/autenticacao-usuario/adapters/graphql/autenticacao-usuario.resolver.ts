@@ -1,12 +1,10 @@
-import {Inject} from '@nestjs/common';
-import {Mutation, Parent, Query, ResolveField, Resolver, ResolveReference} from '@nestjs/graphql';
-import {ActorContext} from '../../../../../infrastructure/iam/actor-context';
-import {
-  ACTOR_CONTEXT_SYSTEM
-} from '../../../../../infrastructure/iam/actor-context/providers/actor-context-system.provider';
-import {ResolveActorContext} from '../../../../../infrastructure/iam/authentication/decorators/ResolveActorContext';
-import {ValidatedArgs} from '../../../../../infrastructure/zod/decorators';
-import {AutenticacaoUsuarioService} from '../../autenticacao-usuario.service';
+import { Inject } from '@nestjs/common';
+import { Mutation, Parent, Query, ResolveField, Resolver, ResolveReference } from '@nestjs/graphql';
+import { ActorContext } from '../../../../../infrastructure/iam/actor-context';
+import { ACTOR_CONTEXT_SYSTEM } from '../../../../../infrastructure/iam/actor-context/providers/actor-context-system.provider';
+import { ResolveActorContext } from '../../../../../infrastructure/iam/authentication/decorators/ResolveActorContext';
+import { ValidatedArgs } from '../../../../../infrastructure/zod/decorators';
+import { AutenticacaoUsuarioService } from '../../autenticacao-usuario.service';
 import {
   UpdateUsuarioInputZod,
   UsuarioCheckEmailAvailabilityInputZod,
@@ -25,7 +23,7 @@ import {
   UsuarioFindByIdInputType,
   UsuarioUpdateInputType,
 } from './index';
-import {UsuarioUpdatePasswordInputType} from './input-types/UsuarioUpdatePasswordInputType';
+import { UsuarioUpdatePasswordInputType } from './input-types/UsuarioUpdatePasswordInputType';
 
 @Resolver(() => AutenticacaoUsuarioType)
 export class AutenticacaoUsuarioResolver {
@@ -34,8 +32,7 @@ export class AutenticacaoUsuarioResolver {
     private usuarioService: AutenticacaoUsuarioService,
     @Inject(ACTOR_CONTEXT_SYSTEM)
     private actorContextSystem: ActorContext,
-  ) {
-  }
+  ) {}
 
   @ResolveReference()
   async resolveReference(reference: { __typename: string; id: string }): Promise<AutenticacaoUsuarioType> {
@@ -47,9 +44,9 @@ export class AutenticacaoUsuarioResolver {
   @Query(() => AutenticacaoUsuarioType)
   async usuarioFindById(
     @ResolveActorContext()
-      actorContext: ActorContext,
+    actorContext: ActorContext,
     @ValidatedArgs('dto', UsuarioFindByIdInputZod)
-      dto: UsuarioFindByIdInputType,
+    dto: UsuarioFindByIdInputType,
   ) {
     return this.usuarioService.usuarioFindByIdStrict(actorContext, dto);
   }
@@ -59,9 +56,9 @@ export class AutenticacaoUsuarioResolver {
   @Query(() => Boolean)
   async usuarioCheckEmailAvailability(
     @ResolveActorContext()
-      actorContext: ActorContext,
+    actorContext: ActorContext,
     @ValidatedArgs('dto', UsuarioCheckEmailAvailabilityInputZod)
-      dto: UsuarioCheckEmailAvailabilityInputType,
+    dto: UsuarioCheckEmailAvailabilityInputType,
   ) {
     return this.usuarioService.usuarioCheckEmailAvailability(actorContext, dto);
   }
@@ -69,9 +66,9 @@ export class AutenticacaoUsuarioResolver {
   @Query(() => Boolean)
   async usuarioCheckMatriculaSiapeAvailability(
     @ResolveActorContext()
-      actorContext: ActorContext,
+    actorContext: ActorContext,
     @ValidatedArgs('dto', UsuarioCheckMatriculaSiapeAvailabilityInputZod)
-      dto: UsuarioCheckMatriculaSiapeAvailabilityInputType,
+    dto: UsuarioCheckMatriculaSiapeAvailabilityInputType,
   ) {
     return this.usuarioService.usuarioCheckMatriculaSiapeAvailability(actorContext, dto);
   }
@@ -83,9 +80,9 @@ export class AutenticacaoUsuarioResolver {
   @Mutation(() => AutenticacaoUsuarioType)
   async usuarioCreate(
     @ResolveActorContext()
-      actorContext: ActorContext,
+    actorContext: ActorContext,
     @ValidatedArgs('dto', UsuarioCreateInputZod)
-      dto: UsuarioCreateInputType,
+    dto: UsuarioCreateInputType,
   ) {
     return this.usuarioService.usuarioCreate(actorContext, dto);
   }
@@ -93,9 +90,9 @@ export class AutenticacaoUsuarioResolver {
   @Mutation(() => AutenticacaoUsuarioType)
   async usuarioUpdate(
     @ResolveActorContext()
-      actorContext: ActorContext,
+    actorContext: ActorContext,
     @ValidatedArgs('dto', UpdateUsuarioInputZod)
-      dto: UsuarioUpdateInputType,
+    dto: UsuarioUpdateInputType,
   ) {
     return this.usuarioService.usuarioUpdate(actorContext, dto);
   }
@@ -103,9 +100,9 @@ export class AutenticacaoUsuarioResolver {
   @Mutation(() => Boolean)
   async usuarioUpdatePassword(
     @ResolveActorContext()
-      actorContext: ActorContext,
+    actorContext: ActorContext,
     @ValidatedArgs('dto', UsuarioUpdatePasswordInputZod)
-      dto: UsuarioUpdatePasswordInputType,
+    dto: UsuarioUpdatePasswordInputType,
   ) {
     return this.usuarioService.usuarioUpdatePassword(actorContext, dto);
   }
@@ -113,9 +110,9 @@ export class AutenticacaoUsuarioResolver {
   @Mutation(() => Boolean)
   async usuarioDelete(
     @ResolveActorContext()
-      actorContext: ActorContext,
+    actorContext: ActorContext,
     @ValidatedArgs('dto', UsuarioDeleteInputZod)
-      dto: UsuarioDeleteInputType,
+    dto: UsuarioDeleteInputType,
   ) {
     return this.usuarioService.usuarioDelete(actorContext, dto);
   }
@@ -124,32 +121,32 @@ export class AutenticacaoUsuarioResolver {
 
   // START: fields graphql-resolvers
 
-  @ResolveField('nome', () => String, {nullable: true})
+  @ResolveField('nome', () => String, { nullable: true })
   async nome(
     @ResolveActorContext()
-      actorContext: ActorContext,
+    actorContext: ActorContext,
     @Parent()
-      parent: AutenticacaoUsuarioType,
+    parent: AutenticacaoUsuarioType,
   ) {
     return this.usuarioService.getUsuarioNome(actorContext, parent.id);
   }
 
-  @ResolveField('email', () => String, {nullable: true})
+  @ResolveField('email', () => String, { nullable: true })
   async email(
     @ResolveActorContext()
-      actorContext: ActorContext,
+    actorContext: ActorContext,
     @Parent()
-      parent: AutenticacaoUsuarioType,
+    parent: AutenticacaoUsuarioType,
   ) {
     return this.usuarioService.getUsuarioEmail(actorContext, parent.id);
   }
 
-  @ResolveField('matriculaSiape', () => String, {nullable: true})
+  @ResolveField('matriculaSiape', () => String, { nullable: true })
   async matriculaSiape(
     @ResolveActorContext()
-      actorContext: ActorContext,
+    actorContext: ActorContext,
     @Parent()
-      parent: AutenticacaoUsuarioType,
+    parent: AutenticacaoUsuarioType,
   ) {
     return this.usuarioService.getUsuarioMatriculaSiape(actorContext, parent.id);
   }
@@ -161,9 +158,9 @@ export class AutenticacaoUsuarioResolver {
   @ResolveField('dateCreated', () => Date)
   async dateCreated(
     @ResolveActorContext()
-      actorContext: ActorContext,
+    actorContext: ActorContext,
     @Parent()
-      parent: AutenticacaoUsuarioType,
+    parent: AutenticacaoUsuarioType,
   ) {
     return this.usuarioService.getUsuarioDateCreated(actorContext, parent.id);
   }
@@ -171,19 +168,19 @@ export class AutenticacaoUsuarioResolver {
   @ResolveField('dateUpdated', () => Date)
   async dateUpdated(
     @ResolveActorContext()
-      actorContext: ActorContext,
+    actorContext: ActorContext,
     @Parent()
-      parent: AutenticacaoUsuarioType,
+    parent: AutenticacaoUsuarioType,
   ) {
     return this.usuarioService.getUsuarioDateUpdated(actorContext, parent.id);
   }
 
-  @ResolveField('dateDeleted', () => Date, {nullable: true})
+  @ResolveField('dateDeleted', () => Date, { nullable: true })
   async dateDeleted(
     @ResolveActorContext()
-      actorContext: ActorContext,
+    actorContext: ActorContext,
     @Parent()
-      parent: AutenticacaoUsuarioType,
+    parent: AutenticacaoUsuarioType,
   ) {
     return this.usuarioService.getUsuarioDateDeleted(actorContext, parent.id);
   }

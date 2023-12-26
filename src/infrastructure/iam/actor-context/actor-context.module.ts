@@ -1,5 +1,5 @@
-import {Global, Module} from '@nestjs/common';
-import {actorContextProviders} from './providers/actor-context.providers';
+import { Global, Module } from '@nestjs/common';
+import { actorContextProviders } from './providers/actor-context.providers';
 
 @Global()
 @Module({
@@ -12,5 +12,4 @@ import {actorContextProviders} from './providers/actor-context.providers';
     ...actorContextProviders,
   ],
 })
-export class ActorContextModule {
-}
+export class ActorContextModule {}

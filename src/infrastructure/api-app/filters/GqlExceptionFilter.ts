@@ -1,5 +1,5 @@
-import {Catch, HttpException} from '@nestjs/common';
-import {GqlExceptionFilter as NestGqlExceptionFilter} from '@nestjs/graphql';
+import { Catch, HttpException } from '@nestjs/common';
+import { GqlExceptionFilter as NestGqlExceptionFilter } from '@nestjs/graphql';
 
 @Catch(HttpException)
 export class GqlExceptionFilter implements NestGqlExceptionFilter {

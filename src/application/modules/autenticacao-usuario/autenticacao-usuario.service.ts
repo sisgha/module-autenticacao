@@ -1,4 +1,4 @@
-import {ForbiddenException, Injectable, InternalServerErrorException, NotFoundException} from '@nestjs/common';
+import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import {
   IUsuarioCheckEmailAvailabilityInput,
   IUsuarioCheckMatriculaSiapeAvailabilityInput,
@@ -11,29 +11,28 @@ import {
   ValidationErrorCodesAuth,
   ValidationErrorCodeUsuario,
 } from '@sisgea/spec';
-import {get, has, omit, pick} from 'lodash';
-import {FindOneOptions} from 'typeorm';
-import {ValidationFailedException} from '../../../infrastructure/api-app/validation';
-import {UsuarioDbEntity} from '../../../infrastructure/database/entities/usuario.db.entity';
-import {ActorContext} from '../../../infrastructure/iam/actor-context';
-import {ActorUser} from '../../../infrastructure/iam/authentication';
-import {IAuthorizationAction} from '../../../infrastructure/iam/authorization';
-import {KeycloakClientService} from '../../../infrastructure/keycloak-client';
+import { get, has, omit, pick } from 'lodash';
+import { FindOneOptions } from 'typeorm';
+import { ValidationFailedException } from '../../../infrastructure/api-app/validation';
+import { UsuarioDbEntity } from '../../../infrastructure/database/entities/usuario.db.entity';
+import { ActorContext } from '../../../infrastructure/iam/actor-context';
+import { ActorUser } from '../../../infrastructure/iam/authentication';
+import { IAuthorizationAction } from '../../../infrastructure/iam/authorization';
+import { KeycloakClientService } from '../../../infrastructure/keycloak-client';
 
 @Injectable()
 export class AutenticacaoUsuarioService {
   constructor(
     // ...
     private keycloakClientService: KeycloakClientService,
-  ) {
-  }
+  ) {}
 
   async usuarioFindById(actorContext: ActorContext, dto: IUsuarioFindByIdInput, options?: FindOneOptions<UsuarioDbEntity>) {
-    const targetUsuario = await actorContext.db_run(async ({usuarioRepository}) => {
+    const targetUsuario = await actorContext.db_run(async ({ usuarioRepository }) => {
       return usuarioRepository.findOne({
         cache: 50,
         ...options,
-        where: {id: dto.id, ...options?.where},
+        where: { id: dto.id, ...options?.where },
         select: ['id'],
       });
     });
@@ -42,11 +41,11 @@ export class AutenticacaoUsuarioService {
       return null;
     }
 
-    const usuario = await actorContext.db_run<UsuarioDbEntity>(async ({usuarioRepository}) => {
+    const usuario = await actorContext.db_run<UsuarioDbEntity>(async ({ usuarioRepository }) => {
       return await usuarioRepository.findOneOrFail({
         select: ['id'],
         ...options,
-        where: {id: targetUsuario.id},
+        where: { id: targetUsuario.id },
       });
     });
 
@@ -57,7 +56,7 @@ export class AutenticacaoUsuarioService {
     actorContext: ActorContext,
     usuarioId: IUsuarioFindByIdInput['id'],
   ): Promise<T | null> {
-    const usuario = await this.usuarioFindById(actorContext, {id: usuarioId});
+    const usuario = await this.usuarioFindById(actorContext, { id: usuarioId });
     return <T>usuario;
   }
 
@@ -75,14 +74,14 @@ export class AutenticacaoUsuarioService {
     actorContext: ActorContext,
     usuarioId: IUsuarioFindByIdInput['id'],
   ): Promise<T> {
-    const usuario = await this.usuarioFindByIdStrict(actorContext, {id: usuarioId});
+    const usuario = await this.usuarioFindByIdStrict(actorContext, { id: usuarioId });
     return <T>usuario;
   }
 
   async usuarioFindByEmail(actorContext: ActorContext, email: string, options?: FindOneOptions<UsuarioDbEntity>) {
-    const targetUsuario = await actorContext.db_run(async ({usuarioRepository}) => {
+    const targetUsuario = await actorContext.db_run(async ({ usuarioRepository }) => {
       return await usuarioRepository.findOne({
-        where: {email: email},
+        where: { email: email },
         select: ['id'],
       });
     });
@@ -91,7 +90,7 @@ export class AutenticacaoUsuarioService {
       return null;
     }
 
-    return this.usuarioFindById(actorContext, {id: targetUsuario.id}, options);
+    return this.usuarioFindById(actorContext, { id: targetUsuario.id }, options);
   }
 
   async usuarioFindByEmailStrict(actorContext: ActorContext, email: string, options?: FindOneOptions<UsuarioDbEntity>) {
@@ -105,9 +104,9 @@ export class AutenticacaoUsuarioService {
   }
 
   async usuarioFindByMatriculaSiape(actorContext: ActorContext, matriculaSiape: string, options?: FindOneOptions<UsuarioDbEntity>) {
-    const targetUsuario = await actorContext.db_run(async ({usuarioRepository}) => {
+    const targetUsuario = await actorContext.db_run(async ({ usuarioRepository }) => {
       return await usuarioRepository.findOne({
-        where: {matriculaSiape: matriculaSiape},
+        where: { matriculaSiape: matriculaSiape },
         select: ['id'],
       });
     });
@@ -116,7 +115,7 @@ export class AutenticacaoUsuarioService {
       return null;
     }
 
-    return this.usuarioFindById(actorContext, {id: targetUsuario.id}, options);
+    return this.usuarioFindById(actorContext, { id: targetUsuario.id }, options);
   }
 
   async usuarioFindByMatriculaSiapeStrict(actorContext: ActorContext, matriculaSiape: string, options?: FindOneOptions<UsuarioDbEntity>) {
@@ -130,17 +129,17 @@ export class AutenticacaoUsuarioService {
   }
 
   async usuarioCheckEmailAvailability(actorContext: ActorContext, dto: IUsuarioCheckEmailAvailabilityInput) {
-    const isEmailBeingUsedByOtherUsuario = await actorContext.db_run(async ({usuarioRepository}) => {
+    const isEmailBeingUsedByOtherUsuario = await actorContext.db_run(async ({ usuarioRepository }) => {
       const qb = usuarioRepository.createQueryBuilder('usuario');
 
       qb.select('usuario.id');
 
-      qb.where('usuario.email = :email', {email: dto.email});
+      qb.where('usuario.email = :email', { email: dto.email });
 
       qb.andWhere('usuario.dateDeleted is NULL');
 
       if (dto.usuarioId) {
-        qb.andWhere('usuario.id != :usuarioId', {usuarioId: dto.usuarioId});
+        qb.andWhere('usuario.id != :usuarioId', { usuarioId: dto.usuarioId });
       }
 
       const count = await qb.getCount();
@@ -152,17 +151,17 @@ export class AutenticacaoUsuarioService {
   }
 
   async usuarioCheckMatriculaSiapeAvailability(actorContext: ActorContext, dto: IUsuarioCheckMatriculaSiapeAvailabilityInput) {
-    const isMatriculaSiapeBeingUsedByOtherUsuario = await actorContext.db_run(async ({usuarioRepository}) => {
+    const isMatriculaSiapeBeingUsedByOtherUsuario = await actorContext.db_run(async ({ usuarioRepository }) => {
       const qb = usuarioRepository.createQueryBuilder('usuario');
 
       qb.select('usuario.id');
 
-      qb.where('usuario.matriculaSiape = :matriculaSiape', {matriculaSiape: dto.matriculaSiape});
+      qb.where('usuario.matriculaSiape = :matriculaSiape', { matriculaSiape: dto.matriculaSiape });
 
       qb.andWhere('usuario.dateDeleted is NULL');
 
       if (dto.usuarioId) {
-        qb.andWhere('usuario.id != :usuarioId', {usuarioId: dto.usuarioId});
+        qb.andWhere('usuario.id != :usuarioId', { usuarioId: dto.usuarioId });
       }
 
       const count = await qb.getCount();
@@ -174,7 +173,7 @@ export class AutenticacaoUsuarioService {
   }
 
   async getUsuariosCount(actorContext: ActorContext, includeDeleted = false) {
-    return actorContext.db_run(async ({usuarioRepository}) => {
+    return actorContext.db_run(async ({ usuarioRepository }) => {
       const qb = usuarioRepository.createQueryBuilder('usuario');
 
       qb.select('usuario.id');
@@ -247,7 +246,7 @@ export class AutenticacaoUsuarioService {
   // ...
 
   async loadUsuarioFromId(actorContext: ActorContext, usuarioId: string) {
-    const dbUsuario = await this.usuarioFindById(actorContext, {id: usuarioId});
+    const dbUsuario = await this.usuarioFindById(actorContext, { id: usuarioId });
 
     if (dbUsuario) {
       const dbUsuarioDateDeleted = await this.getUsuarioDateDeleted(actorContext, dbUsuario.id);
@@ -280,7 +279,7 @@ export class AutenticacaoUsuarioService {
         }
       }
 
-      const newUsuario = await actorContext.db_run(async ({usuarioRepository}) => {
+      const newUsuario = await actorContext.db_run(async ({ usuarioRepository }) => {
         const newUsuario = usuarioRepository.create();
 
         newUsuario.id = usuarioId;
@@ -305,7 +304,7 @@ export class AutenticacaoUsuarioService {
     if (has(fieldsData, 'email')) {
       const email = get(fieldsData, 'email')!;
 
-      const isEmailAvailable = await this.usuarioCheckEmailAvailability(actorContext, {email: email, usuarioId: null});
+      const isEmailAvailable = await this.usuarioCheckEmailAvailability(actorContext, { email: email, usuarioId: null });
 
       if (!isEmailAvailable) {
         throw new ValidationFailedException([
@@ -343,8 +342,8 @@ export class AutenticacaoUsuarioService {
 
     await actorContext.ensurePermission(SisgeaResource.USUARIO, IAuthorizationAction.CREATE, usuario);
 
-    const dbUsuario = await actorContext.db_run(async ({usuarioRepository}) => {
-      const kcUsuario = await this.keycloakClientService.createUser(actorContext, {...dto});
+    const dbUsuario = await actorContext.db_run(async ({ usuarioRepository }) => {
+      const kcUsuario = await this.keycloakClientService.createUser(actorContext, { ...dto });
 
       usuario.id = kcUsuario.id;
 
@@ -406,12 +405,12 @@ export class AutenticacaoUsuarioService {
 
     await actorContext.ensurePermission(SisgeaResource.USUARIO, IAuthorizationAction.UPDATE, updatedUsuario);
 
-    await actorContext.db_run(async ({usuarioRepository}) => {
+    await actorContext.db_run(async ({ usuarioRepository }) => {
       const result = await usuarioRepository
         .createQueryBuilder('user')
         .update()
         .set(updatedUsuario)
-        .where('id = :id', {id: usuario.id})
+        .where('id = :id', { id: usuario.id })
         .execute();
 
       const rowsAffected = result.affected ?? 0;
@@ -460,14 +459,14 @@ export class AutenticacaoUsuarioService {
     const usuarioDateDeleted = await this.getUsuarioDateDeleted(actorContext, dto.id);
 
     if (usuarioDateDeleted === null) {
-      await actorContext.db_run(async ({usuarioRepository}) => {
+      await actorContext.db_run(async ({ usuarioRepository }) => {
         const result = await usuarioRepository
           .createQueryBuilder('usuario')
           .update()
           .set({
             dateDeleted: new Date(),
           })
-          .where('id = :id', {id: usuario.id})
+          .where('id = :id', { id: usuario.id })
           .execute();
 
         return result;
