@@ -1,5 +1,5 @@
-import { DataSource, EntityManager } from 'typeorm';
-import { UsuarioDbEntity } from '../entities/usuario.db.entity';
+import {DataSource, EntityManager} from 'typeorm';
+import {UsuarioDbEntity} from '../entities/usuario.db.entity';
 
 export type IUsuarioRepository = ReturnType<typeof getUsuarioRepository>;
 

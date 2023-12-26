@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { BrokerAsPromised as Broker, BrokerConfig } from 'rascal';
-import { EnvironmentConfigService } from '../environment-config';
+import {Injectable} from '@nestjs/common';
+import {BrokerAsPromised as Broker, BrokerConfig} from 'rascal';
+import {EnvironmentConfigService} from '../environment-config';
 
 @Injectable()
 export class MessageBrokerContainerService {
@@ -9,7 +9,8 @@ export class MessageBrokerContainerService {
   constructor(
     //
     private environmentConfigService: EnvironmentConfigService,
-  ) {}
+  ) {
+  }
 
   async setup() {
     if (this.#broker === null) {

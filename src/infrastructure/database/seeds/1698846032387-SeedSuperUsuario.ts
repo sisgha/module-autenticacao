@@ -1,11 +1,11 @@
-import { NestFactory } from '@nestjs/core';
-import { MigrationInterface, QueryRunner } from 'typeorm';
-import { ACTOR_CONTEXT_SYSTEM } from '../../iam/actor-context/providers/actor-context-system.provider';
-import { AppModule } from '../../../application/app.module';
-import { EnvironmentConfigService } from '../../environment-config';
-import { KCClientService } from '../../kc-client';
-import { DatabaseContext } from '../database-context';
-import { UsuarioDbEntity } from '../entities/usuario.db.entity';
+import {NestFactory} from '@nestjs/core';
+import {MigrationInterface, QueryRunner} from 'typeorm';
+import {ACTOR_CONTEXT_SYSTEM} from '../../iam/actor-context/providers/actor-context-system.provider';
+import {AppModule} from '../../../application/app.module';
+import {EnvironmentConfigService} from '../../environment-config';
+import {KeycloakClientService} from '../../keycloak-client';
+import {DatabaseContext} from '../database-context';
+import {UsuarioDbEntity} from '../entities/usuario.db.entity';
 
 const NOME_SUPER_USUARIO = 'Super Usuário';
 
@@ -17,7 +17,7 @@ export class SeedSuperUsuario1698846032387 implements MigrationInterface {
 
     const app = await NestFactory.create(AppModule);
 
-    const { usuarioRepository } = DatabaseContext.new(dataSource);
+    const {usuarioRepository} = DatabaseContext.new(dataSource);
 
     const superUsuarioAlreadyCreated = await usuarioRepository
       .count({
@@ -37,7 +37,7 @@ export class SeedSuperUsuario1698846032387 implements MigrationInterface {
       const env = app.get(EnvironmentConfigService);
       const credentials = env.getSeedSuperUsuarioCredentials();
 
-      const kcClientService = app.get(KCClientService);
+      const kcClientService = app.get(KeycloakClientService);
 
       const kcUser = await kcClientService.createUser(actorContextSystem, {
         email: credentials.email,
@@ -81,15 +81,15 @@ export class SeedSuperUsuario1698846032387 implements MigrationInterface {
 
     //
 
-    const { usuarioRepository } = DatabaseContext.new(dataSource);
+    const {usuarioRepository} = DatabaseContext.new(dataSource);
 
-    const superUsuarios = await usuarioRepository.find({ where: { flagSeedSuperUsuario: true }, select: ['id'] });
+    const superUsuarios = await usuarioRepository.find({where: {flagSeedSuperUsuario: true}, select: ['id']});
 
     for (const usuario of superUsuarios) {
       await usuarioRepository.delete(usuario.id);
 
       const actorContextSystem = app.get(ACTOR_CONTEXT_SYSTEM);
-      const kcClientService = app.get(KCClientService);
+      const kcClientService = app.get(KeycloakClientService);
 
       await kcClientService.deleteUser(actorContextSystem, usuario.id);
     }

@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common';
-import { MessageBrokerService } from './message-broker.service';
-import { MessageBrokerContainerService } from './message-broker-container.service';
+import {Module} from '@nestjs/common';
+import {MessageBrokerService} from './message-broker.service';
+import {MessageBrokerContainerService} from './message-broker-container.service';
 
 @Module({
   providers: [
@@ -14,4 +14,5 @@ import { MessageBrokerContainerService } from './message-broker-container.servic
     MessageBrokerContainerService,
   ],
 })
-export class MessageBrokerModule {}
+export class MessageBrokerModule {
+}

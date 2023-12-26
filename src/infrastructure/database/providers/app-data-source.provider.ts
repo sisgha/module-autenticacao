@@ -1,7 +1,7 @@
-import { Provider } from '@nestjs/common';
-import { DataSource } from 'typeorm';
-import { APP_DATA_SOURCE_TOKEN } from '../tokens/APP_DATA_SOURCE_TOKEN';
-import { EnvironmentConfigService } from '../../environment-config/environment-config.service';
+import {Provider} from '@nestjs/common';
+import {DataSource} from 'typeorm';
+import {APP_DATA_SOURCE_TOKEN} from '../tokens/APP_DATA_SOURCE_TOKEN';
+import {EnvironmentConfigService} from '../../environment-config/environment-config.service';
 
 export const appDataSourceProvider: Provider = {
   provide: APP_DATA_SOURCE_TOKEN,

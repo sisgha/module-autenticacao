@@ -1,19 +1,20 @@
-import { PgPubSub } from '@imqueue/pg-pubsub';
-import { Injectable } from '@nestjs/common';
-import { EnvironmentConfigService } from '../environment-config';
+import {PgPubSub} from '@imqueue/pg-pubsub';
+import {Injectable} from '@nestjs/common';
+import {EnvironmentConfigService} from '../environment-config';
 
 @Injectable()
 export class DBPubSubContainerService {
   constructor(
     //
     private environmentConfigService: EnvironmentConfigService,
-  ) {}
+  ) {
+  }
 
   static async createPubSubInstance(environmentConfigService: EnvironmentConfigService) {
     const url = environmentConfigService.getDBUrl() ?? null;
 
     if (url) {
-      const pubSub = new PgPubSub({ connectionString: url, singleListener: true });
+      const pubSub = new PgPubSub({connectionString: url, singleListener: true});
 
       pubSub.on('listen', (channel) => console.info(`[db pub sub] Listening to ${channel}...`));
 

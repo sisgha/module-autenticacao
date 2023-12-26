@@ -1,13 +1,15 @@
-import { ForbiddenException, InternalServerErrorException } from '@nestjs/common';
-import { GenericCanRequest } from '@sisgea/autorizacao-client';
-import { IRequestUser } from '@sisgea/sso-nest-client';
-import { get } from 'lodash';
-import { DataSource } from 'typeorm';
-import { IAuthenticatedEntityType } from '../../../domain/iam/authentication';
-import { Actor, ActorUser } from '../authentication';
-import { DatabaseContext } from '../../database/database-context';
-import { SisgeaAutorizacaoConnectContainerService } from '../../sisgea-autorizacao-connect-container/sisgea-autorizacao-connect-container.service';
-import { IAuthorizationAction } from '../authorization';
+import {ForbiddenException, InternalServerErrorException} from '@nestjs/common';
+import {GenericCanRequest} from '@sisgea/autorizacao-client';
+import {IRequestUser} from '@sisgea/nest-auth-connect';
+import {get} from 'lodash';
+import {DataSource} from 'typeorm';
+import {IAuthenticatedEntityType} from '../../../domain/iam/authentication';
+import {DatabaseContext} from '../../database/database-context';
+import {
+  SisgeaAutorizacaoConnectContainerService
+} from '../../sisgea-autorizacao-connect-container/sisgea-autorizacao-connect-container.service';
+import {Actor, ActorUser} from '../authentication';
+import {IAuthorizationAction} from '../authorization';
 
 export class ActorContext {
   constructor(
@@ -15,7 +17,8 @@ export class ActorContext {
     public readonly dataSource: DataSource,
     public readonly sisgeaAutorizacaoClientService: SisgeaAutorizacaoConnectContainerService,
     public readonly actor: Actor,
-  ) {}
+  ) {
+  }
 
   // ...
 
@@ -39,7 +42,7 @@ export class ActorContext {
   // ...
 
   async db_run<T>(callback: (payload: DatabaseContext) => Promise<T>): Promise<T> {
-    const { dataSource, actor } = this;
+    const {dataSource, actor} = this;
 
     try {
       const result = await dataSource.transaction(async (entityManager) => {

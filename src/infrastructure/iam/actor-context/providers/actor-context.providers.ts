@@ -1,4 +1,4 @@
-import { actorContextSystemProvider } from './actor-context-system.provider';
+import {actorContextSystemProvider} from './actor-context-system.provider';
 
 export const actorContextProviders = [
   //

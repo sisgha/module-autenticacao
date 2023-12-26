@@ -1,9 +1,9 @@
-import { IModuleAutenticacaoAppResource } from '../../domain';
-import { AutenticacaoUsuarioAppResource } from './autenticacao-usuario/autenticacao-usuario.app-resource';
+import {IModuleAutenticacaoAppResource} from '../../domain';
+import {AutenticacaoAppResourceUsuario} from './autenticacao-app-resource-usuario';
 
 export const AutenticacaoAppResources: IModuleAutenticacaoAppResource[] = [
   //
-  AutenticacaoUsuarioAppResource,
+  AutenticacaoAppResourceUsuario,
 ];
 
 export const getAppResourceByKey = (key: string) => {

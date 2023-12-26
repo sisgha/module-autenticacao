@@ -1,9 +1,9 @@
-import { PgPubSub } from '@imqueue/pg-pubsub';
-import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
-import { DatabaseService } from '../database/database.service';
-import { DBEventDbEntity } from '../database/entities/db_event.db.entity';
-import { MessageBrokerService } from '../message-broker/message-broker.service';
-import { DBPubSubContainerService } from './db-pub-sub-container.service';
+import {PgPubSub} from '@imqueue/pg-pubsub';
+import {Injectable, OnApplicationBootstrap} from '@nestjs/common';
+import {DatabaseService} from '../database/database.service';
+import {DbEventDbEntity} from '../database/entities/db_event.db.entity';
+import {MessageBrokerService} from '../message-broker/message-broker.service';
+import {DBPubSubContainerService} from './db-pub-sub-container.service';
 
 @Injectable()
 export class DBEventsService implements OnApplicationBootstrap {
@@ -18,7 +18,8 @@ export class DBEventsService implements OnApplicationBootstrap {
     private databaseService: DatabaseService,
     private messageBrokerService: MessageBrokerService,
     private dbPubSubContainerService: DBPubSubContainerService,
-  ) {}
+  ) {
+  }
 
   onApplicationBootstrap() {
     this.setup();
@@ -97,14 +98,14 @@ export class DBEventsService implements OnApplicationBootstrap {
     }
   }
 
-  async handleDbEvent(dbEventId: DBEventDbEntity['id']) {
+  async handleDbEvent(dbEventId: DbEventDbEntity['id']) {
     const databaseContext = await this.databaseService.getDatabaseContextApp();
     const dbEventRepository = databaseContext.dbEventRepository;
 
     const dbEvent = await dbEventRepository //
       .createQueryBuilder('db_event')
       .select('db_event')
-      .where('db_event.id = :id', { id: dbEventId })
+      .where('db_event.id = :id', {id: dbEventId})
       .getOne();
 
     if (dbEvent) {
@@ -114,8 +115,8 @@ export class DBEventsService implements OnApplicationBootstrap {
         await dbEventRepository //
           .createQueryBuilder()
           .delete()
-          .from(DBEventDbEntity)
-          .where('id = :id', { id: dbEvent.id })
+          .from(DbEventDbEntity)
+          .where('id = :id', {id: dbEvent.id})
           .execute();
 
         return true;

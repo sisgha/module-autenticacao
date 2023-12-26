@@ -1,4 +1,4 @@
-import { appDataSourceProvider } from './providers/app-data-source.provider';
+import {appDataSourceProvider} from './providers/app-data-source.provider';
 
 export const databaseProviders = [
   // ...

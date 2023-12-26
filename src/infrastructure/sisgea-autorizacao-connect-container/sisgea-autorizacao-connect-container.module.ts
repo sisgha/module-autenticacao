@@ -1,5 +1,5 @@
-import { Global, Module } from '@nestjs/common';
-import { SisgeaAutorizacaoConnectContainerService } from './sisgea-autorizacao-connect-container.service';
+import {Global, Module} from '@nestjs/common';
+import {SisgeaAutorizacaoConnectContainerService} from './sisgea-autorizacao-connect-container.service';
 
 @Global()
 @Module({
@@ -13,4 +13,5 @@ import { SisgeaAutorizacaoConnectContainerService } from './sisgea-autorizacao-c
     SisgeaAutorizacaoConnectContainerService,
   ],
 })
-export class SisgeaAutorizacaoConnectContainerModule {}
+export class SisgeaAutorizacaoConnectContainerModule {
+}

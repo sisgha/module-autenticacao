@@ -1,6 +1,4 @@
-import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { get, has, omit, pick } from 'lodash';
-import { FindOneOptions } from 'typeorm';
+import {ForbiddenException, Injectable, InternalServerErrorException, NotFoundException} from '@nestjs/common';
 import {
   IUsuarioCheckEmailAvailabilityInput,
   IUsuarioCheckMatriculaSiapeAvailabilityInput,
@@ -9,30 +7,33 @@ import {
   IUsuarioFindByIdInput,
   IUsuarioUpdateInput,
   IUsuarioUpdatePasswordInput,
-  SisgeaResourceKey,
-} from '../../../domain';
-import { ActorContext } from '../../../infrastructure/iam/actor-context';
-import { ActorUser } from '../../../infrastructure/iam/authentication';
-import { UsuarioDbEntity } from '../../../infrastructure/database/entities/usuario.db.entity';
-import { KCClientService } from '../../../infrastructure/kc-client';
-import { ValidationFailedException } from '../../validation';
-import { IAuthorizationAction } from '../../../infrastructure/iam/authorization';
-import { ValidationErrorCodesUsuario } from './autenticacao-usuario-dtos/ValidationErrorCodesUsuario';
-import { ValidationErrorCodesAuth } from '../ValidationErrorCodesAuth';
+  SisgeaResource,
+  ValidationErrorCodesAuth,
+  ValidationErrorCodeUsuario,
+} from '@sisgea/spec';
+import {get, has, omit, pick} from 'lodash';
+import {FindOneOptions} from 'typeorm';
+import {ValidationFailedException} from '../../../infrastructure/api-app/validation';
+import {UsuarioDbEntity} from '../../../infrastructure/database/entities/usuario.db.entity';
+import {ActorContext} from '../../../infrastructure/iam/actor-context';
+import {ActorUser} from '../../../infrastructure/iam/authentication';
+import {IAuthorizationAction} from '../../../infrastructure/iam/authorization';
+import {KeycloakClientService} from '../../../infrastructure/keycloak-client';
 
 @Injectable()
 export class AutenticacaoUsuarioService {
   constructor(
     // ...
-    private kcClientService: KCClientService,
-  ) {}
+    private keycloakClientService: KeycloakClientService,
+  ) {
+  }
 
   async usuarioFindById(actorContext: ActorContext, dto: IUsuarioFindByIdInput, options?: FindOneOptions<UsuarioDbEntity>) {
-    const targetUsuario = await actorContext.db_run(async ({ usuarioRepository }) => {
+    const targetUsuario = await actorContext.db_run(async ({usuarioRepository}) => {
       return usuarioRepository.findOne({
         cache: 50,
         ...options,
-        where: { id: dto.id, ...options?.where },
+        where: {id: dto.id, ...options?.where},
         select: ['id'],
       });
     });
@@ -41,22 +42,22 @@ export class AutenticacaoUsuarioService {
       return null;
     }
 
-    const usuario = await actorContext.db_run<UsuarioDbEntity>(async ({ usuarioRepository }) => {
+    const usuario = await actorContext.db_run<UsuarioDbEntity>(async ({usuarioRepository}) => {
       return await usuarioRepository.findOneOrFail({
         select: ['id'],
         ...options,
-        where: { id: targetUsuario.id },
+        where: {id: targetUsuario.id},
       });
     });
 
-    return actorContext.readResource(SisgeaResourceKey.USUARIO, usuario);
+    return actorContext.readResource(SisgeaResource.USUARIO, usuario);
   }
 
   async usuarioFindByIdSimple<T = Pick<UsuarioDbEntity, 'id'>>(
     actorContext: ActorContext,
     usuarioId: IUsuarioFindByIdInput['id'],
   ): Promise<T | null> {
-    const usuario = await this.usuarioFindById(actorContext, { id: usuarioId });
+    const usuario = await this.usuarioFindById(actorContext, {id: usuarioId});
     return <T>usuario;
   }
 
@@ -74,14 +75,14 @@ export class AutenticacaoUsuarioService {
     actorContext: ActorContext,
     usuarioId: IUsuarioFindByIdInput['id'],
   ): Promise<T> {
-    const usuario = await this.usuarioFindByIdStrict(actorContext, { id: usuarioId });
+    const usuario = await this.usuarioFindByIdStrict(actorContext, {id: usuarioId});
     return <T>usuario;
   }
 
   async usuarioFindByEmail(actorContext: ActorContext, email: string, options?: FindOneOptions<UsuarioDbEntity>) {
-    const targetUsuario = await actorContext.db_run(async ({ usuarioRepository }) => {
+    const targetUsuario = await actorContext.db_run(async ({usuarioRepository}) => {
       return await usuarioRepository.findOne({
-        where: { email: email },
+        where: {email: email},
         select: ['id'],
       });
     });
@@ -90,7 +91,7 @@ export class AutenticacaoUsuarioService {
       return null;
     }
 
-    return this.usuarioFindById(actorContext, { id: targetUsuario.id }, options);
+    return this.usuarioFindById(actorContext, {id: targetUsuario.id}, options);
   }
 
   async usuarioFindByEmailStrict(actorContext: ActorContext, email: string, options?: FindOneOptions<UsuarioDbEntity>) {
@@ -104,9 +105,9 @@ export class AutenticacaoUsuarioService {
   }
 
   async usuarioFindByMatriculaSiape(actorContext: ActorContext, matriculaSiape: string, options?: FindOneOptions<UsuarioDbEntity>) {
-    const targetUsuario = await actorContext.db_run(async ({ usuarioRepository }) => {
+    const targetUsuario = await actorContext.db_run(async ({usuarioRepository}) => {
       return await usuarioRepository.findOne({
-        where: { matriculaSiape: matriculaSiape },
+        where: {matriculaSiape: matriculaSiape},
         select: ['id'],
       });
     });
@@ -115,7 +116,7 @@ export class AutenticacaoUsuarioService {
       return null;
     }
 
-    return this.usuarioFindById(actorContext, { id: targetUsuario.id }, options);
+    return this.usuarioFindById(actorContext, {id: targetUsuario.id}, options);
   }
 
   async usuarioFindByMatriculaSiapeStrict(actorContext: ActorContext, matriculaSiape: string, options?: FindOneOptions<UsuarioDbEntity>) {
@@ -129,17 +130,17 @@ export class AutenticacaoUsuarioService {
   }
 
   async usuarioCheckEmailAvailability(actorContext: ActorContext, dto: IUsuarioCheckEmailAvailabilityInput) {
-    const isEmailBeingUsedByOtherUsuario = await actorContext.db_run(async ({ usuarioRepository }) => {
+    const isEmailBeingUsedByOtherUsuario = await actorContext.db_run(async ({usuarioRepository}) => {
       const qb = usuarioRepository.createQueryBuilder('usuario');
 
       qb.select('usuario.id');
 
-      qb.where('usuario.email = :email', { email: dto.email });
+      qb.where('usuario.email = :email', {email: dto.email});
 
       qb.andWhere('usuario.dateDeleted is NULL');
 
       if (dto.usuarioId) {
-        qb.andWhere('usuario.id != :usuarioId', { usuarioId: dto.usuarioId });
+        qb.andWhere('usuario.id != :usuarioId', {usuarioId: dto.usuarioId});
       }
 
       const count = await qb.getCount();
@@ -151,17 +152,17 @@ export class AutenticacaoUsuarioService {
   }
 
   async usuarioCheckMatriculaSiapeAvailability(actorContext: ActorContext, dto: IUsuarioCheckMatriculaSiapeAvailabilityInput) {
-    const isMatriculaSiapeBeingUsedByOtherUsuario = await actorContext.db_run(async ({ usuarioRepository }) => {
+    const isMatriculaSiapeBeingUsedByOtherUsuario = await actorContext.db_run(async ({usuarioRepository}) => {
       const qb = usuarioRepository.createQueryBuilder('usuario');
 
       qb.select('usuario.id');
 
-      qb.where('usuario.matriculaSiape = :matriculaSiape', { matriculaSiape: dto.matriculaSiape });
+      qb.where('usuario.matriculaSiape = :matriculaSiape', {matriculaSiape: dto.matriculaSiape});
 
       qb.andWhere('usuario.dateDeleted is NULL');
 
       if (dto.usuarioId) {
-        qb.andWhere('usuario.id != :usuarioId', { usuarioId: dto.usuarioId });
+        qb.andWhere('usuario.id != :usuarioId', {usuarioId: dto.usuarioId});
       }
 
       const count = await qb.getCount();
@@ -173,7 +174,7 @@ export class AutenticacaoUsuarioService {
   }
 
   async getUsuariosCount(actorContext: ActorContext, includeDeleted = false) {
-    return actorContext.db_run(async ({ usuarioRepository }) => {
+    return actorContext.db_run(async ({usuarioRepository}) => {
       const qb = usuarioRepository.createQueryBuilder('usuario');
 
       qb.select('usuario.id');
@@ -210,7 +211,7 @@ export class AutenticacaoUsuarioService {
       },
     );
 
-    await actorContext.ensurePermission(SisgeaResourceKey.USUARIO, IAuthorizationAction.READ, usuario, [field]);
+    await actorContext.ensurePermission(SisgeaResource.USUARIO, IAuthorizationAction.READ, usuario, [field]);
 
     return <UsuarioDbEntity[K]>usuario[field];
   }
@@ -246,7 +247,7 @@ export class AutenticacaoUsuarioService {
   // ...
 
   async loadUsuarioFromId(actorContext: ActorContext, usuarioId: string) {
-    const dbUsuario = await this.usuarioFindById(actorContext, { id: usuarioId });
+    const dbUsuario = await this.usuarioFindById(actorContext, {id: usuarioId});
 
     if (dbUsuario) {
       const dbUsuarioDateDeleted = await this.getUsuarioDateDeleted(actorContext, dbUsuario.id);
@@ -259,7 +260,7 @@ export class AutenticacaoUsuarioService {
         throw new ForbiddenException('The provided usuario is inactive.');
       }
     } else {
-      const ssoUser = await this.kcClientService.findUserByKeycloakIdStrict(actorContext, usuarioId);
+      const ssoUser = await this.keycloakClientService.findUserByKeycloakIdStrict(actorContext, usuarioId);
 
       const ssoUserId = ssoUser.id ?? null;
 
@@ -279,11 +280,11 @@ export class AutenticacaoUsuarioService {
         }
       }
 
-      const newUsuario = await actorContext.db_run(async ({ usuarioRepository }) => {
+      const newUsuario = await actorContext.db_run(async ({usuarioRepository}) => {
         const newUsuario = usuarioRepository.create();
 
         newUsuario.id = usuarioId;
-        newUsuario.nome = KCClientService.buildUserFullName(ssoUser);
+        newUsuario.nome = KeycloakClientService.buildUserFullName(ssoUser);
         newUsuario.email = ssoUser.email ?? null;
         newUsuario.matriculaSiape = ssoUser.username ?? null;
 
@@ -304,12 +305,12 @@ export class AutenticacaoUsuarioService {
     if (has(fieldsData, 'email')) {
       const email = get(fieldsData, 'email')!;
 
-      const isEmailAvailable = await this.usuarioCheckEmailAvailability(actorContext, { email: email, usuarioId: null });
+      const isEmailAvailable = await this.usuarioCheckEmailAvailability(actorContext, {email: email, usuarioId: null});
 
       if (!isEmailAvailable) {
         throw new ValidationFailedException([
           {
-            code: ValidationErrorCodesUsuario.USUARIO_EMAIL_ALREADY_IN_USE,
+            code: ValidationErrorCodeUsuario.USUARIO_EMAIL_ALREADY_IN_USE,
             message: 'Já existe um usuário com o mesmo email.',
             path: ['email'],
           },
@@ -328,7 +329,7 @@ export class AutenticacaoUsuarioService {
       if (!isMatriculaSiapeAvailable) {
         throw new ValidationFailedException([
           {
-            code: ValidationErrorCodesUsuario.USUARIO_MATRICULA_SIAPE_ALREADY_IN_USE,
+            code: ValidationErrorCodeUsuario.USUARIO_MATRICULA_SIAPE_ALREADY_IN_USE,
             message: 'Já existe um usuário com a mesma Matrícula Siape.',
             path: ['matriculaSiape'],
           },
@@ -340,10 +341,10 @@ export class AutenticacaoUsuarioService {
       ...fieldsData,
     };
 
-    await actorContext.ensurePermission(SisgeaResourceKey.USUARIO, IAuthorizationAction.CREATE, usuario);
+    await actorContext.ensurePermission(SisgeaResource.USUARIO, IAuthorizationAction.CREATE, usuario);
 
-    const dbUsuario = await actorContext.db_run(async ({ usuarioRepository }) => {
-      const kcUsuario = await this.kcClientService.createUser(actorContext, { ...dto });
+    const dbUsuario = await actorContext.db_run(async ({usuarioRepository}) => {
+      const kcUsuario = await this.keycloakClientService.createUser(actorContext, {...dto});
 
       usuario.id = kcUsuario.id;
 
@@ -371,7 +372,7 @@ export class AutenticacaoUsuarioService {
       if (!isEmailAvailable) {
         throw new ValidationFailedException([
           {
-            code: ValidationErrorCodesUsuario.USUARIO_EMAIL_ALREADY_IN_USE,
+            code: ValidationErrorCodeUsuario.USUARIO_EMAIL_ALREADY_IN_USE,
             message: 'Já existe um usuário com o mesmo email.',
             path: ['email'],
           },
@@ -390,7 +391,7 @@ export class AutenticacaoUsuarioService {
       if (!isMatriculaSiapeAvailable) {
         throw new ValidationFailedException([
           {
-            code: ValidationErrorCodesUsuario.USUARIO_MATRICULA_SIAPE_ALREADY_IN_USE,
+            code: ValidationErrorCodeUsuario.USUARIO_MATRICULA_SIAPE_ALREADY_IN_USE,
             message: 'Já existe um usuário com a mesma Matrícula SIAPE.',
             path: ['matriculaSiape'],
           },
@@ -403,20 +404,20 @@ export class AutenticacaoUsuarioService {
       ...fieldsData,
     };
 
-    await actorContext.ensurePermission(SisgeaResourceKey.USUARIO, IAuthorizationAction.UPDATE, updatedUsuario);
+    await actorContext.ensurePermission(SisgeaResource.USUARIO, IAuthorizationAction.UPDATE, updatedUsuario);
 
-    await actorContext.db_run(async ({ usuarioRepository }) => {
+    await actorContext.db_run(async ({usuarioRepository}) => {
       const result = await usuarioRepository
         .createQueryBuilder('user')
         .update()
         .set(updatedUsuario)
-        .where('id = :id', { id: usuario.id })
+        .where('id = :id', {id: usuario.id})
         .execute();
 
       const rowsAffected = result.affected ?? 0;
 
       if (rowsAffected > 0) {
-        await this.kcClientService.updateUser(actorContext, usuario.id, dto);
+        await this.keycloakClientService.updateUser(actorContext, usuario.id, dto);
       }
 
       return result;
@@ -434,7 +435,7 @@ export class AutenticacaoUsuarioService {
       throw new ForbiddenException("You can't change other user password.");
     }
 
-    const isPasswordCorrect = await this.kcClientService.checkUserPassword(actorContext, usuario.id, dto.currentPassword);
+    const isPasswordCorrect = await this.keycloakClientService.checkUserPassword(actorContext, usuario.id, dto.currentPassword);
 
     if (!isPasswordCorrect) {
       throw new ValidationFailedException([
@@ -446,7 +447,7 @@ export class AutenticacaoUsuarioService {
       ]);
     }
 
-    const updatedUsuario = await this.kcClientService.updateUserPassword(actorContext, usuario.id, dto, false);
+    const updatedUsuario = await this.keycloakClientService.updateUserPassword(actorContext, usuario.id, dto, false);
 
     return updatedUsuario;
   }
@@ -454,19 +455,19 @@ export class AutenticacaoUsuarioService {
   async usuarioDelete(actorContext: ActorContext, dto: IUsuarioDeleteInput) {
     const usuario = await this.usuarioFindByIdStrictSimple(actorContext, dto.id);
 
-    await actorContext.ensurePermission(SisgeaResourceKey.USUARIO, IAuthorizationAction.DELETE, usuario);
+    await actorContext.ensurePermission(SisgeaResource.USUARIO, IAuthorizationAction.DELETE, usuario);
 
     const usuarioDateDeleted = await this.getUsuarioDateDeleted(actorContext, dto.id);
 
     if (usuarioDateDeleted === null) {
-      await actorContext.db_run(async ({ usuarioRepository }) => {
+      await actorContext.db_run(async ({usuarioRepository}) => {
         const result = await usuarioRepository
           .createQueryBuilder('usuario')
           .update()
           .set({
             dateDeleted: new Date(),
           })
-          .where('id = :id', { id: usuario.id })
+          .where('id = :id', {id: usuario.id})
           .execute();
 
         return result;
